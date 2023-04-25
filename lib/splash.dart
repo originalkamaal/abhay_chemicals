@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
     return AnimatedSplashScreen(
       splash: Image.asset('assets/images/logo.png'),
       nextScreen:
-          firebaseUser != null ? const LoginScreen() : const LoginScreen(),
+          firebaseUser != null ? HomeScreen() : HomeScreen(), //else LoginScreen
       duration: 3000,
       splashTransition: SplashTransition.fadeTransition,
     );

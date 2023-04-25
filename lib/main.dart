@@ -1,6 +1,6 @@
 import 'package:abhay_chemicals/firebase_options.dart';
 import 'package:abhay_chemicals/routes.dart';
-import 'package:abhay_chemicals/widgets/bloc_providers.dart';
+import 'package:abhay_chemicals/bloc_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
