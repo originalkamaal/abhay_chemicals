@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "34674570223",
+    "project_id": "abhay-chem-production",
+    "storage_bucket": "abhay-chem-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34674570223:android:d01957fc04a3a161d2fc1a",
+        "android_client_info": {
+          "package_name": "com.example.abhay_chemicals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34674570223-13265ksonucb3v0p010rue6fs0ni6uea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMisYOvgjCi0ZX5YfmEddb9piN2y4dJFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34674570223-13265ksonucb3v0p010rue6fs0ni6uea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
