@@ -2,5 +2,5 @@
 
 ## Screens
 
-![Getting Started](./screenshots/splash.png)
-![Login Screen](./screenshots/login.png)
+<img src="./screenshots/splash.png" width="200">
+<img src="./screenshots/login.png" width="200">
