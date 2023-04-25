@@ -4,11 +4,13 @@
 
 ### Splash Screen
 At this stage firebase user status will be checked and accordingly will be navigated to login or home screen
+</br>
 <img src="./screenshots/splash.png" width="200">
 
 
 ### Login Screen
 login screen only for admin, with link for password reset page
+</br>
 <img src="./screenshots/login.png" width="200">
 
 
