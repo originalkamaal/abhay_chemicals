@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         return Scaffold(
           // resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.white,
           appBar: buildAppBar("Login to Dashboard"),
           body: SafeArea(
             child: Center(
