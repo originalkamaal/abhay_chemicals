@@ -2,5 +2,5 @@
 
 ## Screens
 
-![Getting Started](./screenshots/splash.png)
-![Login Screen](./screenshots/login.png)
+![Getting Started](./screenshots/splash.png | width=200)
+![Login Screen](./screenshots/login.png | width=200)
