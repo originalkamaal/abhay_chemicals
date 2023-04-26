@@ -1,74 +1,50 @@
-import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:abhay_chemicals/widgets/info_card.dart';
+import 'package:abhay_chemicals/widgets/sidebar_menu_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SideBar extends StatelessWidget {
-  SideBar({super.key});
-
-  User? user = FirebaseAuth.instance.currentUser;
+  const SideBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: SingleChildScrollView(
-        child: Container(
-          color: Color.fromARGB(255, 135, 205, 100),
-          padding: EdgeInsets.only(left: 25, right: 25, top: 50, bottom: 25),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryElement,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Center(
-                        child: Text(
-                      user!.email![0].toUpperCase() ?? "0",
-                      style: TextStyle(fontSize: 24.sp, color: Colors.white),
-                    )),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        width: 150.w,
-                        child: Text(
-                          user!.email ?? "",
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                              fontSize: 14.sp),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        width: 150.w,
-                        child: Text(
-                          user!.displayName == ""
-                              ? "Admin"
-                              : user!.displayName ?? "Admin",
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ],
+      child: Container(
+        height: double.infinity,
+        color: const Color.fromARGB(255, 10, 8, 31),
+        padding: const EdgeInsets.only(top: 30),
+        child: Column(children: [
+          const InfoCard(
+            name: "Admin",
+            email: "email@email.com",
           ),
-        ),
+          const SizedBox(
+            height: 30,
+          ),
+          SidebarMenuItem(
+            title: "Dashboard",
+            assetSvg: "assets/images/ac_dashboard.svg",
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/home", (route) => false);
+            },
+          ),
+          const SidebarMenuItem(
+              title: "Customers", assetSvg: "assets/images/ac_customers.svg"),
+          const SidebarMenuItem(
+              title: "Suppliers", assetSvg: "assets/images/ac_supplier.svg"),
+          const SidebarMenuItem(
+              title: "Users", assetSvg: "assets/images/ac_admin.svg"),
+          ListTile(
+            onTap: () {},
+            title: const Text("Logout", style: TextStyle(color: Colors.white)),
+            leading: const Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                )),
+          )
+        ]),
       ),
     );
   }

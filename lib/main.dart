@@ -1,7 +1,6 @@
 import 'package:abhay_chemicals/firebase_options.dart';
 import 'package:abhay_chemicals/routes.dart';
 import 'package:abhay_chemicals/bloc_providers.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +32,7 @@ class MainApp extends StatelessWidget {
                       statusBarColor: Colors.transparent))),
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
+          //    home: const SideBar(),
           onGenerateRoute: MyRoutes.generateRoutes,
         ),
       ),

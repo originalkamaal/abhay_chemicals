@@ -1,5 +1,6 @@
 import 'package:abhay_chemicals/blocs/auth_bloc/auth_bloc.dart';
 import 'package:abhay_chemicals/controllers/firebase.dart';
+import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
 import 'package:abhay_chemicals/widgets/input_widgets.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -12,6 +10,8 @@ class AddExpense extends StatefulWidget {
 class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Colors.blueAccent,
+    );
   }
 }

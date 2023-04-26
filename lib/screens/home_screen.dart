@@ -1,17 +1,16 @@
-import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:abhay_chemicals/screens/home/add_expense.dart';
-import 'package:abhay_chemicals/screens/home/add_prodcution.dart';
-import 'package:abhay_chemicals/screens/home/add_purchase.dart';
-import 'package:abhay_chemicals/screens/home/add_sales.dart';
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
+import 'package:abhay_chemicals/screens/expense/expense.dart';
+import 'package:abhay_chemicals/screens/production/prodcution.dart';
+import 'package:abhay_chemicals/screens/purchase/purchase.dart';
 import 'package:abhay_chemicals/screens/home/home.dart';
-import 'package:abhay_chemicals/widgets/input_widgets.dart';
+import 'package:abhay_chemicals/screens/sales/sales.dart';
 import 'package:abhay_chemicals/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
-  int pageNo = 0;
-  HomeScreen({pageNo = 0, super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -43,11 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return PageView(
       controller: pageController,
       onPageChanged: (index) {
-        if (widget.pageNo > 0) {
-          pageChanged(widget.pageNo);
-        } else {
-          pageChanged(index);
-        }
+        pageChanged(index);
       },
       children: const <Widget>[
         Home(),
@@ -57,11 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
         AddExpense()
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
@@ -91,40 +81,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          "assets/images/logo.png",
-          height: 60,
-          fit: BoxFit.fitHeight,
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        actionsIconTheme: IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {}, icon: Icon(Icons.notifications_outlined)),
-        ],
-      ),
-      drawer: SideBar(),
-      body: buildPageView(),
-      bottomNavigationBar: BottomNavigationBar(
-        iconSize: 25,
-        backgroundColor: Color.fromARGB(255, 135, 205, 100),
-        selectedItemColor: Colors.white,
-        onTap: bottomTapped,
-        selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
-        unselectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
-        currentIndex: pageIndex,
-        type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Color.fromARGB(255, 34, 78, 12),
-        items: buildBottomNavBarItems(),
-      ),
+    return BlocBuilder<CommonBloc, CommonState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Image.asset(
+              "assets/images/logo.png",
+              height: 60,
+              fit: BoxFit.fitHeight,
+            ),
+            backgroundColor: Colors.white,
+            iconTheme: const IconThemeData(
+              color: Colors.black,
+            ),
+            actionsIconTheme: const IconThemeData(color: Colors.black),
+            actions: [
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.search_outlined)),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_outlined)),
+            ],
+          ),
+          drawer: const SideBar(),
+          body: buildPageView(),
+          bottomNavigationBar: BottomNavigationBar(
+            iconSize: 25,
+            backgroundColor: const Color.fromARGB(255, 135, 205, 100),
+            selectedItemColor: Colors.white,
+            onTap: (index) {
+              bottomTapped(index);
+            },
+            selectedLabelStyle:
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+            unselectedLabelStyle:
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+            currentIndex: pageIndex,
+            type: BottomNavigationBarType.fixed,
+            unselectedItemColor: const Color.fromARGB(255, 34, 78, 12),
+            items: buildBottomNavBarItems(),
+          ),
+        );
+      },
     );
   }
 }

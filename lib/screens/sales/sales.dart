@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -12,6 +14,8 @@ class AddSales extends StatefulWidget {
 class _AddSalesState extends State<AddSales> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Colors.red,
+    );
   }
 }
