@@ -27,7 +27,7 @@ This is the demo menu as of now, yet to decide which menu keep in bottom and whi
 
 This is the initial look and still under changes. all possible app navigation will be here except search and notification page
 <br>
-<img src="./screenshots/sidebar2.png" width="200">
+<img src="./screenshots/Sidebar2.png" width="200">
 
 ### Production Page
 
