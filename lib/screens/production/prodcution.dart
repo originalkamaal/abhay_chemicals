@@ -1,103 +1,116 @@
+import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
+import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddProduction extends StatefulWidget {
+class AddProduction extends StatelessWidget {
   const AddProduction({super.key});
 
   @override
-  State<AddProduction> createState() => _AddProductionState();
-}
-
-class _AddProductionState extends State<AddProduction> {
-  final CollectionReference _productions =
-      FirebaseFirestore.instance.collection("production");
-  final CollectionReference _purchases =
-      FirebaseFirestore.instance.collection("purchases");
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-            child: const AddNewWithTitle(
-                title: "Productions", routeName: "/addProduction"),
-          ),
-          Flexible(
-            child: StreamBuilder(
-              stream: _productions.snapshots(),
-              builder: (context, streamSnapshot) {
-                if (streamSnapshot.hasData) {
-                  return ListView.builder(
+    return BlocBuilder<ProductionBloc, ProductionState>(
+      builder: (context, state) {
+        if (state is ProductionsLoading) {
+          return const CircularProgressIndicator();
+        } else if (state is ProductionsLoaded) {
+          return Container(
+            color: Colors.white,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: const AddNewWithTitle(
+                      title: "Productions", routeName: "/addProduction"),
+                ),
+                ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: state.productions!.length,
                     itemBuilder: (context, index) {
-                      final DocumentSnapshot documentSnapshot =
-                          streamSnapshot.data!.docs[index];
-                      final int noOfPalti =
-                          documentSnapshot['paltiReport'].length;
+                      var production = state.productions![index];
+                      // print(batchQuantities);
 
                       return Container(
-                        padding:
-                            const EdgeInsets.only(left: 20, right: 20, top: 20),
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          color: Colors.green[50],
-                          child: Column(
-                            children: [
-                              Text("Created On : ${documentSnapshot['date']}"),
-                              Text(
-                                  "Batch No.: ${documentSnapshot['batchNumber']}"),
-                              FutureBuilder<QuerySnapshot>(
-                                  future: FirebaseFirestore.instance
-                                      .collection("purchase")
-                                      .where("batchNumber",
-                                          isEqualTo:
-                                              documentSnapshot['batchNumber'])
-                                      .get(),
-                                  builder: (context, snapShotPurchase) {
-                                    if (snapShotPurchase.hasData) {
-                                      var docs = snapShotPurchase.data!.docs;
-                                      int quantities = 0;
-                                      for (var i = 0; i < docs.length; i++) {
-                                        quantities = quantities +
-                                            (docs[i]['quantity'] as int);
-                                      }
+                        decoration: BoxDecoration(
+                            color: Colors.green[50],
+                            borderRadius: BorderRadius.circular(12)),
+                        margin:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Batch No : ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text("Created On : "),
+                                Text("Composite Date : "),
+                                Text("Last Palti Date : "),
+                                Text("Enrichment Date : "),
+                                Text("No of Palti : "),
+                                Text("Quantities : "),
 
-                                      return Text(
-                                          "Total Quantity : ${quantities.toString()}");
-                                    } else {
-                                      return const Text("NoData");
-                                    }
-                                  }),
-                              Text(
-                                  "Enrichment Date : ${documentSnapshot['enrichment']['date']}"),
-                              Text(
-                                  "No of Palti : ${documentSnapshot['paltiReport'].length}"),
-                              Text(
-                                  "Last Palti : ${noOfPalti > 0 ? documentSnapshot['paltiReport'][noOfPalti - 1]['date'] : "NA"}")
-                            ],
-                          ),
+                                // Text()
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  production.batchNumber ?? "NA",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(production.date ?? "NA"),
+                                Text(production.composite.cdate ?? "NA"),
+                                Text(production.lastPaltidate ?? "NA"),
+                                Text(production.enrichment.edate ?? "NA"),
+                                Text((production.noOfPalti).toString() ?? "NA"),
+                                StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("purchase")
+                                        .where("batchNumber",
+                                            isEqualTo: production.batchNumber)
+                                        .snapshots(),
+                                    builder: (context, snapShot) {
+                                      if (snapShot.hasData) {
+                                        int quantities = 0;
+                                        for (var i = 0;
+                                            i < snapShot.data!.docs.length;
+                                            i++) {
+                                          quantities = quantities +
+                                              (snapShot.data!.docs[i]
+                                                  ['quantity'] as int);
+                                        }
+
+                                        return Text(quantities.toString());
+                                      } else {
+                                        return Text("Loading..");
+                                      }
+                                    })
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            )
+                          ],
                         ),
                       );
-                    },
-                    itemCount: streamSnapshot.data!.docs.length,
-                  );
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
+                    })
+              ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return Text("Error");
+        }
+      },
     );
   }
-  // if (streamSnapshot.hasData) {
-  //
-  // } else {
-  //   return const CircularProgressIndicator();
-  // }
 }
