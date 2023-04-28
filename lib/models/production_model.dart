@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Production {
+  final String id;
   final String batchNumber;
   final Composite composite;
   final String date;
@@ -12,6 +13,7 @@ class Production {
 
   Production(
       {required this.batchNumber,
+      required this.id,
       // required this.paltiReport,
       required this.noOfPalti,
       required this.composite,
@@ -23,6 +25,7 @@ class Production {
 
   static Production fromSnapshot(DocumentSnapshot snap) {
     Production production = Production(
+        id: snap.id,
         batchNumber: snap['batchNumber'] ?? "Error",
         lastPaltidate: snap['paltiReport'].length > 0
             ? snap['paltiReport'][0]['date']

@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/controllers/auth_controller.dart';
 import 'package:abhay_chemicals/widgets/info_card.dart';
 import 'package:abhay_chemicals/widgets/sidebar_menu_item.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +29,21 @@ class SideBar extends StatelessWidget {
                   .pushNamedAndRemoveUntil("/home", (route) => false);
             },
           ),
-          const SidebarMenuItem(
-              title: "Customers", assetSvg: "assets/images/ac_customers.svg"),
+          SidebarMenuItem(
+            title: "Customers",
+            assetSvg: "assets/images/ac_customers.svg",
+            onTap: () {
+              Navigator.of(context).popAndPushNamed("/customers");
+            },
+          ),
           const SidebarMenuItem(
               title: "Suppliers", assetSvg: "assets/images/ac_supplier.svg"),
           const SidebarMenuItem(
               title: "Users", assetSvg: "assets/images/ac_admin.svg"),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              AuthController(context: context).logout();
+            },
             title: const Text("Logout", style: TextStyle(color: Colors.white)),
             leading: const Padding(
                 padding: EdgeInsets.only(left: 10.0),

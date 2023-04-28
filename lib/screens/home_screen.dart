@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildPageView() {
     return PageView(
+      allowImplicitScrolling: true,
       controller: pageController,
       onPageChanged: (index) {
         pageChanged(index);

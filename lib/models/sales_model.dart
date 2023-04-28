@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Sales {
+  final String id;
   final String careOf;
   final String challanNo;
   final String customer;
@@ -14,6 +15,7 @@ class Sales {
   final String village;
 
   Sales({
+    required this.id,
     required this.careOf,
     required this.challanNo,
     required this.customer,
@@ -27,6 +29,7 @@ class Sales {
 
   static Sales fromSnapshot(DocumentSnapshot snap) {
     return Sales(
+      id: snap.id,
       careOf: snap['careOf'].toString(),
       challanNo: snap['challanNumber'].toString(),
       customer: snap['customer'].toString(),

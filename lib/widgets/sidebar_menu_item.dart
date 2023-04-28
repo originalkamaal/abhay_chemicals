@@ -19,7 +19,7 @@ class SidebarMenuItem extends StatelessWidget {
           assetSvg,
           width: 20,
           colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          semanticsLabel: "Home",
+          semanticsLabel: title,
         ),
       ),
     );

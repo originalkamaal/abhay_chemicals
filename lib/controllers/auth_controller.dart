@@ -17,6 +17,16 @@ class AuthController {
   //   }
   // }
 
+  void logout() async {
+    try {
+      await FirebaseAuth.instance.signOut().then((value) =>
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/signin", (route) => false));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void handleLoginIn(String type) async {
     try {
       if (type == "email") {
