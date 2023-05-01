@@ -1,33 +1,34 @@
+import 'package:abhay_chemicals/models/supplier_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract class PurchaseRepository {
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases(
+abstract class SupplierRepository {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSuppliers(
       {DocumentSnapshot? lastDoc, int limit = 10, required int action});
 }
 
-class PurchaseController extends PurchaseRepository {
+class SupplierController extends SupplierRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  PurchaseController({FirebaseFirestore? firebaseFirestore})
+  SupplierController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases(
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSuppliers(
       {DocumentSnapshot? lastDoc, int limit = 10, required int action}) {
     print("Called prodctions");
 
     if (lastDoc == null) {
-      return _firebaseFirestore.collection("purchase").limit(limit).snapshots();
+      return _firebaseFirestore.collection("Supplier").limit(limit).snapshots();
     } else {
       if (action == 1) {
         return _firebaseFirestore
-            .collection("purchase")
+            .collection("Supplier")
             .startAfterDocument(lastDoc)
             .limit(limit)
             .snapshots();
       } else {
         return _firebaseFirestore
-            .collection("purchase")
+            .collection("Supplier")
             .endBeforeDocument(lastDoc)
             .limit(limit)
             .snapshots();

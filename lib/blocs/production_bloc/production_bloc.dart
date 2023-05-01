@@ -4,9 +4,6 @@ import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
-import '../../models/production_model.dart';
 
 part 'production_event.dart';
 part 'production_state.dart';
@@ -44,9 +41,11 @@ class ProductionBloc extends Bloc<ProductionEvent, ProductionState> {
           .listen((productions) {
         add(UpdateProductions(
             productions: productions,
-            pageNumber: event.direction == 1
+            pageNumber: event.direction == "forward"
                 ? event.pageNumber + 1
-                : event.pageNumber - 1,
+                : event.direction == "back"
+                    ? event.pageNumber - 1
+                    : event.pageNumber,
             limit: event.limit));
       });
     }

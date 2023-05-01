@@ -10,11 +10,14 @@ abstract class ProductionEvent extends Equatable {
 class LoadProductions extends ProductionEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
-  final int direction;
+  final String direction;
   final int pageNumber;
 
   LoadProductions(
-      {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
+      {this.lastDoc,
+      this.limit = 3,
+      this.direction = "init",
+      this.pageNumber = 1});
 }
 
 class UpdateProductions extends ProductionEvent {

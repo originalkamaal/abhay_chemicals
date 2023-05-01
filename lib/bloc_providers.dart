@@ -1,14 +1,21 @@
+//Blocs
+import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
+import 'package:abhay_chemicals/blocs/suppliers_bloc/suppliers_bloc.dart';
+import 'package:abhay_chemicals/controllers/purchase_controller.dart';
+import 'package:abhay_chemicals/controllers/supplier_controller.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abhay_chemicals/blocs/auth_bloc/auth_bloc.dart';
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
+import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
 import 'package:abhay_chemicals/blocs/expense_bloc/expense_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/blocs/purchase_bloc/purchase_bloc.dart';
-import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
-import 'package:abhay_chemicals/controllers/expense_controller.dart';
+
+//Controllers
+import 'package:abhay_chemicals/controllers/customers_controllers.dart';
 import 'package:abhay_chemicals/controllers/production_controller.dart';
-import 'package:abhay_chemicals/controllers/purchase_controller.dart';
+import 'package:abhay_chemicals/controllers/expense_controller.dart';
 import 'package:abhay_chemicals/controllers/sales_controller.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocProviders {
   static get allBlocProviders => [
@@ -17,15 +24,24 @@ class AppBlocProviders {
         BlocProvider(
             create: (_) =>
                 ProductionBloc(productionController: ProductionController())
-                  ..add(LoadProductions(limit: 3))),
+                  ..add(LoadProductions(limit: 2))),
         BlocProvider(
             create: (_) =>
-                SalesBloc(salesControler: SalesController())..add(LoadSales())),
+                CustomersBloc(customersController: CustomersController())
+                  ..add(LoadCustomers(limit: 2))),
         BlocProvider(
-            create: (_) => PurchaseBloc(purchaseControler: PurchaseController())
-              ..add(LoadPurchase())),
+            create: (_) =>
+                SaleBloc(saleController: SalesController())..add(LoadSales())),
         BlocProvider(
-            create: (_) => ExpenseBloc(expenseControler: ExpenseController())
-              ..add(LoadExpense()))
+            create: (_) =>
+                PurchaseBloc(purchaseController: PurchaseController())
+                  ..add(LoadPurchases(limit: 2))),
+        BlocProvider(
+            create: (_) => ExpenseBloc(expenseController: ExpenseController())
+              ..add(LoadExpense(limit: 2))),
+        BlocProvider(
+            create: (_) =>
+                SuppliersBloc(supplierController: SupplierController())
+                  ..add(LoadSuppliers(limit: 2)))
       ];
 }

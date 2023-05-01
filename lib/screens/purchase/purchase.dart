@@ -1,7 +1,4 @@
-import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/blocs/purchase_bloc/purchase_bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +20,7 @@ class _AddPurchaseState extends State<AddPurchase> {
     List<String> items = ["10", "20", "30", "50"];
     return BlocBuilder<PurchaseBloc, PurchaseState>(
       builder: (context, state) {
-        if (state is PurchaseLoaded) {
+        if (state is PurchasesLoaded) {
           return Container(
             color: Colors.white,
             child: ListView(
@@ -61,11 +58,11 @@ class _AddPurchaseState extends State<AddPurchase> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ))
                     ],
-                    rows: state.purchase.map((e) {
+                    rows: state.purchases!.docs.map((e) {
                       return DataRow(cells: [
-                        DataCell(Text(e.batchNumber)),
-                        DataCell(Text(e.date)),
-                        DataCell(Text(e.item)),
+                        DataCell(Text(e['batchNumber'])),
+                        DataCell(Text(e['date'])),
+                        DataCell(Text(e['item'])),
                         DataCell(Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,

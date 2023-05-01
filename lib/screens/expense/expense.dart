@@ -18,6 +18,7 @@ class _AddExpenseState extends State<AddExpense> {
     List<String> items = ["10", "20", "30", "50"];
     return BlocBuilder<ExpenseBloc, ExpenseState>(
       builder: (context, state) {
+        ExpenseBloc bloc = context.read<ExpenseBloc>();
         if (state is ExpenseLoaded) {
           return Container(
             color: Colors.white,
@@ -56,11 +57,11 @@ class _AddExpenseState extends State<AddExpense> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ))
                     ],
-                    rows: state.expense.map((e) {
+                    rows: state.expense!.docs.map((e) {
                       return DataRow(cells: [
-                        DataCell(Text(e.date)),
-                        DataCell(Text(e.amount)),
-                        DataCell(Text(e.description)),
+                        DataCell(Text(e['date'])),
+                        DataCell(Text(e['amount'].toString())),
+                        DataCell(Text(e['description'])),
                         DataCell(Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,26 +97,51 @@ class _AddExpenseState extends State<AddExpense> {
                                 .map((e) =>
                                     DropdownMenuItem(value: e, child: Text(e)))
                                 .toList(),
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              bloc.add(LoadExpense(limit: int.parse(value!)));
+                            }),
                       ),
                     ),
                     Row(
                       children: [
-                        Container(
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_left)),
+                        GestureDetector(
+                          onTap: () async {
+                            print("Is first page ${state.pageNumber}");
+                            if (state.pageNumber > 1) {
+                              bloc.add(LoadExpense(
+                                  direction: 0,
+                                  limit: state.limit,
+                                  lastDoc: state.expense!.docs.last));
+                            }
+                          },
+                          child: Container(
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_left)),
+                          ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10, right: 20),
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_right)),
-                        )
+                        GestureDetector(
+                          onTap: () async {
+                            if (state.expense!.docs.length == state.limit) {
+                              bloc.add(LoadExpense(
+                                  direction: 1,
+                                  limit: state.limit,
+                                  lastDoc: state.expense!.docs.last));
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 20),
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_right)),
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           );

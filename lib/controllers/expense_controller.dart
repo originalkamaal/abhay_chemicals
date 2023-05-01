@@ -1,8 +1,8 @@
-import 'package:abhay_chemicals/models/expense_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class ExpenseRepository {
-  Stream<List<Expense>> getAllExpenses();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllExpenses(
+      {DocumentSnapshot? lastDoc, int limit = 10, required int action});
 }
 
 class ExpenseController extends ExpenseRepository {
@@ -12,12 +12,26 @@ class ExpenseController extends ExpenseRepository {
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<List<Expense>> getAllExpenses() {
-    return _firebaseFirestore
-        .collection("expenses")
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((e) => Expense.fromSnapshot(e)).toList();
-    });
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllExpenses(
+      {DocumentSnapshot? lastDoc, int limit = 10, required int action}) {
+    print("Called Expense");
+
+    if (lastDoc == null) {
+      return _firebaseFirestore.collection("expenses").limit(limit).snapshots();
+    } else {
+      if (action == 1) {
+        return _firebaseFirestore
+            .collection("expenses")
+            .startAfterDocument(lastDoc)
+            .limit(limit)
+            .snapshots();
+      } else {
+        return _firebaseFirestore
+            .collection("expenses")
+            .endBeforeDocument(lastDoc)
+            .limitToLast(limit)
+            .snapshots();
+      }
+    }
   }
 }

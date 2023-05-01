@@ -36,10 +36,19 @@ class SideBar extends StatelessWidget {
               Navigator.of(context).popAndPushNamed("/customers");
             },
           ),
-          const SidebarMenuItem(
-              title: "Suppliers", assetSvg: "assets/images/ac_supplier.svg"),
-          const SidebarMenuItem(
-              title: "Users", assetSvg: "assets/images/ac_admin.svg"),
+          SidebarMenuItem(
+              title: "Suppliers",
+              assetSvg: "assets/images/ac_supplier.svg",
+              onTap: () {
+                Navigator.of(context).popAndPushNamed("/suppliers");
+              }),
+          SidebarMenuItem(
+            title: "Users",
+            assetSvg: "assets/images/ac_admin.svg",
+            onTap: () {
+              Navigator.of(context).popAndPushNamed("/users");
+            },
+          ),
           ListTile(
             onTap: () {
               AuthController(context: context).logout();

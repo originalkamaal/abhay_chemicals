@@ -1,29 +1,29 @@
-part of 'production_bloc.dart';
+part of 'expense_bloc.dart';
 
-abstract class ProductionEvent extends Equatable {
-  const ProductionEvent();
+abstract class ExpenseEvent extends Equatable {
+  const ExpenseEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadProductions extends ProductionEvent {
+class LoadExpense extends ExpenseEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
   final int direction;
   final int pageNumber;
 
-  LoadProductions(
+  LoadExpense(
       {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
 }
 
-class UpdateProductions extends ProductionEvent {
-  final QuerySnapshot<Map<String, dynamic>>? productions;
+class UpdateExpense extends ExpenseEvent {
+  final QuerySnapshot<Map<String, dynamic>>? expense;
   final int? pageNumber;
   final int? limit;
 
-  UpdateProductions({
-    this.productions,
+  UpdateExpense({
+    this.expense,
     this.pageNumber,
     this.limit,
   });

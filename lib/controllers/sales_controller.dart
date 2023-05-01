@@ -1,9 +1,8 @@
-import 'package:abhay_chemicals/models/production_model.dart';
-import 'package:abhay_chemicals/models/sales_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class SalesRepository {
-  Stream<List<Sales>> getAllSales();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSales(
+      {DocumentSnapshot? lastDoc, int limit = 10, required int action});
 }
 
 class SalesController extends SalesRepository {
@@ -13,10 +12,26 @@ class SalesController extends SalesRepository {
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<List<Sales>> getAllSales() {
-    print("SaleControler -> GetAllSales");
-    return _firebaseFirestore.collection("sales").snapshots().map((snapshot) {
-      return snapshot.docs.map((e) => Sales.fromSnapshot(e)).toList();
-    });
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSales(
+      {DocumentSnapshot? lastDoc, int limit = 10, required int action}) {
+    print("Called prodctions");
+
+    if (lastDoc == null) {
+      return _firebaseFirestore.collection("sales").limit(limit).snapshots();
+    } else {
+      if (action == 1) {
+        return _firebaseFirestore
+            .collection("sales")
+            .startAfterDocument(lastDoc)
+            .limit(limit)
+            .snapshots();
+      } else {
+        return _firebaseFirestore
+            .collection("sales")
+            .endBeforeDocument(lastDoc)
+            .limitToLast(limit)
+            .snapshots();
+      }
+    }
   }
 }

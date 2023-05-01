@@ -1,18 +1,21 @@
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
-import 'package:abhay_chemicals/blocs/purchase_bloc/purchase_bloc.dart';
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddProduction extends StatelessWidget {
+class AddProduction extends StatefulWidget {
   const AddProduction({super.key});
 
   @override
+  State<AddProduction> createState() => _AddProductionState();
+}
+
+class _AddProductionState extends State<AddProduction> {
+  @override
   Widget build(BuildContext context) {
     List<String> items = ["3", "10", "20", "30", "50"];
+    String selectedCount = "3";
 
     return BlocBuilder<ProductionBloc, ProductionState>(
       builder: (context, state) {
@@ -83,17 +86,18 @@ class AddProduction extends StatelessWidget {
                         child: DropdownButton(
                             style:
                                 TextStyle(fontSize: 12.sp, color: Colors.black),
-                            elevation: 10,
                             dropdownColor:
                                 const Color.fromARGB(255, 237, 246, 237),
-                            value: "10",
-                            items: items
-                                .map((e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)))
-                                .toList(),
+                            value: selectedCount,
+                            items: items.map((e) {
+                              return DropdownMenuItem(value: e, child: Text(e));
+                            }).toList(),
                             onChanged: (value) {
-                              context.read<ProductionBloc>().add(
-                                  LoadProductions(limit: int.parse(value!)));
+                              setState(() {
+                                selectedCount = value.toString();
+                                context.read<ProductionBloc>().add(
+                                    LoadProductions(limit: int.parse(value!)));
+                              });
                             }),
                       ),
                     ),
@@ -104,9 +108,10 @@ class AddProduction extends StatelessWidget {
                             print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadProductions(
-                                  direction: 0,
+                                  direction: "back",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
-                                  lastDoc: state.productions!.docs.last));
+                                  lastDoc: state.productions!.docs.first));
                             }
                           },
                           child: Container(
@@ -118,11 +123,14 @@ class AddProduction extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () async {
+                            print("Is first page ${state.pageNumber}");
                             if (state.productions!.docs.length == state.limit) {
                               bloc.add(LoadProductions(
-                                  direction: 1,
+                                  direction: "forward",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.productions!.docs.last));
+                              print(state.productions!.docs.length);
                             }
                           },
                           child: Container(

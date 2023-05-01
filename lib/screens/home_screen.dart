@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: const <Widget>[
         Home(),
         AddProduction(),
-        AddSales(),
+        AddSale(),
         AddPurchase(),
         AddExpense()
       ],

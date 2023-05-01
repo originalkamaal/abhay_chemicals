@@ -1,30 +1,21 @@
 import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
-import 'package:abhay_chemicals/common/consts/colors.dart';
+import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../widgets/add_new_with_title.dart';
+class AddSale extends StatelessWidget {
+  const AddSale({super.key});
 
-class AddSales extends StatefulWidget {
-  const AddSales({super.key});
-
-  @override
-  State<AddSales> createState() => _AddSalesState();
-}
-
-class _AddSalesState extends State<AddSales> {
-  List<String> items = ["10", "20", "30", "50"];
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SalesBloc, SalesState>(
+    List<String> items = ["3", "10", "20", "30", "50"];
+
+    return BlocBuilder<SaleBloc, SalesState>(
       builder: (context, state) {
+        SaleBloc bloc = context.read<SaleBloc>();
         if (state is SalesLoading) {
-          return const Center(
-            child: Text("Loading"),
-          );
+          return const Center(child: Text("Loading..."));
         } else if (state is SalesLoaded) {
           return Container(
             color: Colors.white,
@@ -35,7 +26,7 @@ class _AddSalesState extends State<AddSales> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: const AddNewWithTitle(
-                      title: "Sales", routeName: "/addPurchase"),
+                      title: "Sales", routeName: "/addSales"),
                 ),
                 DataTable(
                     columnSpacing: 1,
@@ -44,7 +35,7 @@ class _AddSalesState extends State<AddSales> {
                     columns: const [
                       DataColumn(
                           label: Text(
-                        "ID",
+                        "Batch",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )),
                       DataColumn(
@@ -54,20 +45,15 @@ class _AddSalesState extends State<AddSales> {
                       )),
                       DataColumn(
                           label: Text(
-                        "Qty",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                      DataColumn(
-                          label: Text(
                         "Actions",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ))
                     ],
-                    rows: state.sales.map((e) {
+                    rows: state.sales!.docs.map((e) {
+                      print(e);
                       return DataRow(cells: [
-                        DataCell(Text(e.orderId)),
-                        DataCell(Text(e.date)),
-                        DataCell(Text(e.quantity)),
+                        DataCell(Text(e['challanNumber'].toString())),
+                        DataCell(Text(e['date'])),
                         DataCell(Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,33 +89,58 @@ class _AddSalesState extends State<AddSales> {
                                 .map((e) =>
                                     DropdownMenuItem(value: e, child: Text(e)))
                                 .toList(),
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              context
+                                  .read<SaleBloc>()
+                                  .add(LoadSales(limit: int.parse(value!)));
+                            }),
                       ),
                     ),
                     Row(
                       children: [
-                        Container(
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_left)),
+                        GestureDetector(
+                          onTap: () async {
+                            print("Is first page ${state.pageNumber}");
+                            if (state.pageNumber > 1) {
+                              bloc.add(LoadSales(
+                                  direction: 0,
+                                  limit: state.limit,
+                                  lastDoc: state.sales!.docs.last));
+                            }
+                          },
+                          child: Container(
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_left)),
+                          ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10, right: 20),
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_right)),
-                        )
+                        GestureDetector(
+                          onTap: () async {
+                            if (state.sales!.docs.length == state.limit) {
+                              bloc.add(LoadSales(
+                                  direction: 1,
+                                  limit: state.limit,
+                                  lastDoc: state.sales!.docs.last));
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 20),
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_right)),
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           );
         } else {
-          return Center(
-            child: Text("Something Went wrong"),
-          );
+          return const Text("Error");
         }
       },
     );
