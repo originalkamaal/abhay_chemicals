@@ -15,7 +15,7 @@ class LoadProductions extends ProductionEvent {
 
   LoadProductions(
       {this.lastDoc,
-      this.limit = 3,
+      this.limit = 10,
       this.direction = "init",
       this.pageNumber = 1});
 }

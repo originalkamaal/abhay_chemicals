@@ -16,7 +16,7 @@ class PurchasesLoaded extends PurchaseState {
   final bool hasMore;
   const PurchasesLoaded(
       {this.purchases,
-      this.limit = 3,
+      this.limit = 10,
       this.hasMore = true,
       this.pageNumber = 1});
 

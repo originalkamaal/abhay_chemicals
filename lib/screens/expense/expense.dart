@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../widgets/add_new_with_title.dart';
+import '../../widgets/list_actions_widget.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -13,9 +14,10 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
   @override
   Widget build(BuildContext context) {
-    List<String> items = ["10", "20", "30", "50"];
     return BlocBuilder<ExpenseBloc, ExpenseState>(
       builder: (context, state) {
         ExpenseBloc bloc = context.read<ExpenseBloc>();
@@ -62,22 +64,7 @@ class _AddExpenseState extends State<AddExpense> {
                         DataCell(Text(e['date'])),
                         DataCell(Text(e['amount'].toString())),
                         DataCell(Text(e['description'])),
-                        DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            ),
-                            Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            )
-                          ],
-                        )),
+                        dataTableActions(context, e.reference),
                       ]);
                     }).toList()),
                 Row(
@@ -89,16 +76,19 @@ class _AddExpenseState extends State<AddExpense> {
                         child: DropdownButton(
                             style:
                                 TextStyle(fontSize: 12.sp, color: Colors.black),
-                            elevation: 10,
                             dropdownColor:
                                 const Color.fromARGB(255, 237, 246, 237),
-                            value: "10",
-                            items: items
-                                .map((e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)))
-                                .toList(),
+                            value: selectedCount,
+                            items: items.map((e) {
+                              return DropdownMenuItem(value: e, child: Text(e));
+                            }).toList(),
                             onChanged: (value) {
-                              bloc.add(LoadExpense(limit: int.parse(value!)));
+                              setState(() {
+                                selectedCount = value.toString();
+                                context
+                                    .read<ExpenseBloc>()
+                                    .add(LoadExpense(limit: int.parse(value!)));
+                              });
                             }),
                       ),
                     ),
@@ -109,9 +99,10 @@ class _AddExpenseState extends State<AddExpense> {
                             print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadExpense(
-                                  direction: 0,
+                                  direction: "back",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
-                                  lastDoc: state.expense!.docs.last));
+                                  lastDoc: state.expense!.docs.first));
                             }
                           },
                           child: Container(
@@ -123,11 +114,14 @@ class _AddExpenseState extends State<AddExpense> {
                         ),
                         GestureDetector(
                           onTap: () async {
+                            print("Is first page ${state.pageNumber}");
                             if (state.expense!.docs.length == state.limit) {
                               bloc.add(LoadExpense(
-                                  direction: 1,
+                                  direction: "forward",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.expense!.docs.last));
+                              print(state.expense!.docs.length);
                             }
                           },
                           child: Container(

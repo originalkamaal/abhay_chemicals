@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/models/production_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class ProductionRepository {
@@ -15,8 +14,6 @@ class ProductionController extends ProductionRepository {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductions(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
-    print("Called prodctions");
-
     if (lastDoc == null) {
       return _firebaseFirestore
           .collection("production")

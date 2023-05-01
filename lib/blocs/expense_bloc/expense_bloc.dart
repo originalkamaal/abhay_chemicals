@@ -39,9 +39,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
           .listen((expense) {
         add(UpdateExpense(
             expense: expense,
-            pageNumber: event.direction == 1
+            pageNumber: event.direction == "forward"
                 ? event.pageNumber + 1
-                : event.pageNumber - 1,
+                : event.direction == "back"
+                    ? event.pageNumber - 1
+                    : event.pageNumber,
             limit: event.limit));
       });
     }

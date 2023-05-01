@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class CustomersRepository {
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomers(
-      {DocumentSnapshot? lastDoc, int limit = 10, required int action});
+      {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"});
 }
 
 class CustomersController extends CustomersRepository {
@@ -13,25 +13,25 @@ class CustomersController extends CustomersRepository {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomers(
-      {DocumentSnapshot? lastDoc, int limit = 10, required int action}) {
-    print("Called Customers");
-
+      {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
     if (lastDoc == null) {
-      return _firebaseFirestore
-          .collection("customers")
-          .limit(limit)
-          .snapshots();
+      return _firebaseFirestore.collection("customer").limit(limit).snapshots();
     } else {
-      if (action == 1) {
+      if (action == "forward") {
         return _firebaseFirestore
-            .collection("customers")
+            .collection("customer")
             .startAfterDocument(lastDoc)
             .limit(limit)
             .snapshots();
+      } else if (action == "back") {
+        return _firebaseFirestore
+            .collection("customer")
+            .endBeforeDocument(lastDoc)
+            .limitToLast(limit)
+            .snapshots();
       } else {
         return _firebaseFirestore
-            .collection("Customers")
-            .endBeforeDocument(lastDoc)
+            .collection("customer")
             .limit(limit)
             .snapshots();
       }

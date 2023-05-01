@@ -15,7 +15,7 @@ class UsersLoaded extends UsersState {
   final int pageNumber;
   final bool hasMore;
   const UsersLoaded(
-      {this.users, this.limit = 3, this.hasMore = true, this.pageNumber = 1});
+      {this.users, this.limit = 10, this.hasMore = true, this.pageNumber = 1});
 
   @override
   List<Object> get props => [users!, limit];

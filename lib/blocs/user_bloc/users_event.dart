@@ -10,11 +10,14 @@ abstract class UsersEvent extends Equatable {
 class LoadUsers extends UsersEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
-  final int direction;
+  final String direction;
   final int pageNumber;
 
   LoadUsers(
-      {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
+      {this.lastDoc,
+      this.limit = 10,
+      this.direction = "init",
+      this.pageNumber = 1});
 }
 
 class UpdateUsers extends UsersEvent {

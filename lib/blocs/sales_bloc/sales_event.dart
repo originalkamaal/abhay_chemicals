@@ -10,11 +10,14 @@ abstract class SalesEvent extends Equatable {
 class LoadSales extends SalesEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
-  final int direction;
+  final String direction;
   final int pageNumber;
 
   LoadSales(
-      {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
+      {this.lastDoc,
+      this.limit = 10,
+      this.direction = "init",
+      this.pageNumber = 1});
 }
 
 class UpdateSales extends SalesEvent {

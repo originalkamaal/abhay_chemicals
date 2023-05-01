@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../widgets/list_actions_widget.dart';
+
 class AddProduction extends StatefulWidget {
   const AddProduction({super.key});
 
@@ -12,11 +14,10 @@ class AddProduction extends StatefulWidget {
 }
 
 class _AddProductionState extends State<AddProduction> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
   @override
   Widget build(BuildContext context) {
-    List<String> items = ["3", "10", "20", "30", "50"];
-    String selectedCount = "3";
-
     return BlocBuilder<ProductionBloc, ProductionState>(
       builder: (context, state) {
         ProductionBloc bloc = context.read<ProductionBloc>();
@@ -35,6 +36,7 @@ class _AddProductionState extends State<AddProduction> {
                       title: "Productions", routeName: "/addProductions"),
                 ),
                 DataTable(
+                    showCheckboxColumn: false,
                     columnSpacing: 1,
                     headingRowColor: MaterialStateProperty.resolveWith<Color>(
                         (states) => const Color.fromARGB(255, 237, 246, 237)),
@@ -56,26 +58,19 @@ class _AddProductionState extends State<AddProduction> {
                       ))
                     ],
                     rows: state.productions!.docs.map((e) {
-                      return DataRow(cells: [
-                        DataCell(Text(e['batchNumber'])),
-                        DataCell(Text(e['date'])),
-                        DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            ),
-                            Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            )
+                      return DataRow(
+                          cells: [
+                            DataCell(Text(e['batchNumber'])),
+                            DataCell(Text(e['date'])),
+                            dataTableActions(context, e.reference),
                           ],
-                        )),
-                      ]);
+                          onSelectChanged: (value) {
+                            Scaffold.of(context)
+                                .showBottomSheet((context) => Container(
+                                      color: Colors.red,
+                                      height: 500,
+                                    ));
+                          });
                     }).toList()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

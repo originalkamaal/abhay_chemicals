@@ -1,8 +1,10 @@
 //Blocs
 import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
 import 'package:abhay_chemicals/blocs/suppliers_bloc/suppliers_bloc.dart';
+import 'package:abhay_chemicals/blocs/user_bloc/user_bloc.dart';
 import 'package:abhay_chemicals/controllers/purchase_controller.dart';
 import 'package:abhay_chemicals/controllers/supplier_controller.dart';
+import 'package:abhay_chemicals/controllers/users_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abhay_chemicals/blocs/auth_bloc/auth_bloc.dart';
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
@@ -24,24 +26,27 @@ class AppBlocProviders {
         BlocProvider(
             create: (_) =>
                 ProductionBloc(productionController: ProductionController())
-                  ..add(LoadProductions(limit: 2))),
+                  ..add(LoadProductions())),
         BlocProvider(
             create: (_) =>
                 CustomersBloc(customersController: CustomersController())
-                  ..add(LoadCustomers(limit: 2))),
+                  ..add(LoadCustomers())),
         BlocProvider(
             create: (_) =>
                 SaleBloc(saleController: SalesController())..add(LoadSales())),
         BlocProvider(
             create: (_) =>
                 PurchaseBloc(purchaseController: PurchaseController())
-                  ..add(LoadPurchases(limit: 2))),
+                  ..add(LoadPurchases())),
         BlocProvider(
             create: (_) => ExpenseBloc(expenseController: ExpenseController())
-              ..add(LoadExpense(limit: 2))),
+              ..add(LoadExpense())),
         BlocProvider(
             create: (_) =>
                 SuppliersBloc(supplierController: SupplierController())
-                  ..add(LoadSuppliers(limit: 2)))
+                  ..add(LoadSuppliers())),
+        BlocProvider(
+            create: (_) =>
+                UsersBloc(usersController: UsersController())..add(LoadUsers()))
       ];
 }

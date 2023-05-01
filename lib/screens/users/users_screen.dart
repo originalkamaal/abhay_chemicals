@@ -1,15 +1,22 @@
 import 'package:abhay_chemicals/blocs/user_bloc/user_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/list_actions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Users extends StatelessWidget {
+class Users extends StatefulWidget {
   const Users({super.key});
 
   @override
+  State<Users> createState() => _UsersState();
+}
+
+class _UsersState extends State<Users> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
+  @override
   Widget build(BuildContext context) {
-    List<String> items = ["3", "10", "20", "30", "50"];
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -52,12 +59,12 @@ class Users extends StatelessWidget {
                       columns: const [
                         DataColumn(
                             label: Text(
-                          "Batch",
+                          "Name",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
                             label: Text(
-                          "Date",
+                          "Email",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
@@ -68,24 +75,9 @@ class Users extends StatelessWidget {
                       ],
                       rows: state.users!.docs.map((e) {
                         return DataRow(cells: [
-                          DataCell(Text(e['id'])),
-                          DataCell(Text(e['id'])),
-                          DataCell(Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.delete_outline,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              ),
-                              Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              )
-                            ],
-                          )),
+                          DataCell(Text(e['name'])),
+                          DataCell(Text(e['email'])),
+                          dataTableActions(context, e.reference),
                         ]);
                       }).toList()),
                   Row(
@@ -97,18 +89,20 @@ class Users extends StatelessWidget {
                           child: DropdownButton(
                               style: TextStyle(
                                   fontSize: 12.sp, color: Colors.black),
-                              elevation: 10,
                               dropdownColor:
                                   const Color.fromARGB(255, 237, 246, 237),
-                              value: "10",
-                              items: items
-                                  .map((e) => DropdownMenuItem(
-                                      value: e, child: Text(e)))
-                                  .toList(),
+                              value: selectedCount,
+                              items: items.map((e) {
+                                return DropdownMenuItem(
+                                    value: e, child: Text(e));
+                              }).toList(),
                               onChanged: (value) {
-                                context
-                                    .read<UsersBloc>()
-                                    .add(LoadUsers(limit: int.parse(value!)));
+                                setState(() {
+                                  selectedCount = value.toString();
+                                  context
+                                      .read<UsersBloc>()
+                                      .add(LoadUsers(limit: int.parse(value!)));
+                                });
                               }),
                         ),
                       ),
@@ -119,9 +113,10 @@ class Users extends StatelessWidget {
                               print("Is first page ${state.pageNumber}");
                               if (state.pageNumber > 1) {
                                 bloc.add(LoadUsers(
-                                    direction: 0,
+                                    direction: "back",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
-                                    lastDoc: state.users!.docs.last));
+                                    lastDoc: state.users!.docs.first));
                               }
                             },
                             child: Container(
@@ -133,11 +128,14 @@ class Users extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              print("Is first page ${state.pageNumber}");
                               if (state.users!.docs.length == state.limit) {
                                 bloc.add(LoadUsers(
-                                    direction: 1,
+                                    direction: "forward",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
                                     lastDoc: state.users!.docs.last));
+                                print(state.users!.docs.length);
                               }
                             },
                             child: Container(

@@ -40,9 +40,11 @@ class SuppliersBloc extends Bloc<SuppliersEvent, SuppliersState> {
           .listen((suppliers) {
         add(UpdateSuppliers(
             suppliers: suppliers,
-            pageNumber: event.direction == 1
+            pageNumber: event.direction == "forward"
                 ? event.pageNumber + 1
-                : event.pageNumber - 1,
+                : event.direction == "back"
+                    ? event.pageNumber - 1
+                    : event.pageNumber,
             limit: event.limit));
       });
     }

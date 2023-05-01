@@ -15,7 +15,7 @@ class SalesLoaded extends SalesState {
   final int pageNumber;
   final bool hasMore;
   const SalesLoaded(
-      {this.sales, this.limit = 3, this.hasMore = true, this.pageNumber = 1});
+      {this.sales, this.limit = 10, this.hasMore = true, this.pageNumber = 1});
 
   @override
   List<Object> get props => [sales!, limit];

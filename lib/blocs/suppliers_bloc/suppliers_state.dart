@@ -16,7 +16,7 @@ class SuppliersLoaded extends SuppliersState {
   final bool hasMore;
   const SuppliersLoaded(
       {this.suppliers,
-      this.limit = 3,
+      this.limit = 10,
       this.hasMore = true,
       this.pageNumber = 1});
 

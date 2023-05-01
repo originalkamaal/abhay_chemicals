@@ -10,11 +10,14 @@ abstract class ExpenseEvent extends Equatable {
 class LoadExpense extends ExpenseEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
-  final int direction;
+  final String direction;
   final int pageNumber;
 
   LoadExpense(
-      {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
+      {this.lastDoc,
+      this.limit = 10,
+      this.direction = "init",
+      this.pageNumber = 1});
 }
 
 class UpdateExpense extends ExpenseEvent {

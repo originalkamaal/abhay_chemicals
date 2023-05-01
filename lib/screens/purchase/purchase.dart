@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../widgets/add_new_with_title.dart';
+import '../../widgets/list_actions_widget.dart';
 
 class AddPurchase extends StatefulWidget {
   const AddPurchase({super.key});
@@ -15,12 +16,14 @@ class AddPurchase extends StatefulWidget {
 class _AddPurchaseState extends State<AddPurchase> {
   // final CollectionReference _purchase =
   //     FirebaseFirestore.instance.collection("purchase");
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
   @override
   Widget build(BuildContext context) {
-    List<String> items = ["10", "20", "30", "50"];
     return BlocBuilder<PurchaseBloc, PurchaseState>(
       builder: (context, state) {
         if (state is PurchasesLoaded) {
+          PurchaseBloc bloc = context.read<PurchaseBloc>();
           return Container(
             color: Colors.white,
             child: ListView(
@@ -63,22 +66,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                         DataCell(Text(e['batchNumber'])),
                         DataCell(Text(e['date'])),
                         DataCell(Text(e['item'])),
-                        DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            ),
-                            Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            )
-                          ],
-                        )),
+                        dataTableActions(context, e.reference),
                       ]);
                     }).toList()),
                 Row(
@@ -90,34 +78,65 @@ class _AddPurchaseState extends State<AddPurchase> {
                         child: DropdownButton(
                             style:
                                 TextStyle(fontSize: 12.sp, color: Colors.black),
-                            elevation: 10,
                             dropdownColor:
                                 const Color.fromARGB(255, 237, 246, 237),
-                            value: "10",
-                            items: items
-                                .map((e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)))
-                                .toList(),
-                            onChanged: (value) {}),
+                            value: selectedCount,
+                            items: items.map((e) {
+                              return DropdownMenuItem(value: e, child: Text(e));
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCount = value.toString();
+                                context.read<PurchaseBloc>().add(
+                                    LoadPurchases(limit: int.parse(value!)));
+                              });
+                            }),
                       ),
                     ),
                     Row(
                       children: [
-                        Container(
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_left)),
+                        GestureDetector(
+                          onTap: () async {
+                            print("Is first page ${state.pageNumber}");
+                            if (state.pageNumber > 1) {
+                              bloc.add(LoadPurchases(
+                                  direction: "back",
+                                  pageNumber: state.pageNumber,
+                                  limit: state.limit,
+                                  lastDoc: state.purchases!.docs.first));
+                            }
+                          },
+                          child: Container(
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_left)),
+                          ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10, right: 20),
-                          color: const Color.fromARGB(255, 237, 246, 237),
-                          padding: EdgeInsets.all(5),
-                          child: Center(child: Icon(Icons.chevron_right)),
-                        )
+                        GestureDetector(
+                          onTap: () async {
+                            print("Is first page ${state.pageNumber}");
+                            if (state.purchases!.docs.length == state.limit) {
+                              bloc.add(LoadPurchases(
+                                  direction: "forward",
+                                  pageNumber: state.pageNumber,
+                                  limit: state.limit,
+                                  lastDoc: state.purchases!.docs.last));
+                              print(state.purchases!.docs.length);
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 20),
+                            color: const Color.fromARGB(255, 237, 246, 237),
+                            padding: const EdgeInsets.all(5),
+                            child:
+                                const Center(child: Icon(Icons.chevron_right)),
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           );

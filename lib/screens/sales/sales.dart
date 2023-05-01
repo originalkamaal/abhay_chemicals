@@ -1,16 +1,24 @@
+import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddSale extends StatelessWidget {
+import '../../widgets/list_actions_widget.dart';
+
+class AddSale extends StatefulWidget {
   const AddSale({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<String> items = ["3", "10", "20", "30", "50"];
+  State<AddSale> createState() => _AddSaleState();
+}
 
+class _AddSaleState extends State<AddSale> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<SaleBloc, SalesState>(
       builder: (context, state) {
         SaleBloc bloc = context.read<SaleBloc>();
@@ -54,22 +62,7 @@ class AddSale extends StatelessWidget {
                       return DataRow(cells: [
                         DataCell(Text(e['challanNumber'].toString())),
                         DataCell(Text(e['date'])),
-                        DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            ),
-                            Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.black.withOpacity(0.3),
-                            )
-                          ],
-                        )),
+                        dataTableActions(context, e.reference),
                       ]);
                     }).toList()),
                 Row(
@@ -81,18 +74,19 @@ class AddSale extends StatelessWidget {
                         child: DropdownButton(
                             style:
                                 TextStyle(fontSize: 12.sp, color: Colors.black),
-                            elevation: 10,
                             dropdownColor:
                                 const Color.fromARGB(255, 237, 246, 237),
-                            value: "10",
-                            items: items
-                                .map((e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)))
-                                .toList(),
+                            value: selectedCount,
+                            items: items.map((e) {
+                              return DropdownMenuItem(value: e, child: Text(e));
+                            }).toList(),
                             onChanged: (value) {
-                              context
-                                  .read<SaleBloc>()
-                                  .add(LoadSales(limit: int.parse(value!)));
+                              setState(() {
+                                selectedCount = value.toString();
+                                context
+                                    .read<SaleBloc>()
+                                    .add(LoadSales(limit: int.parse(value!)));
+                              });
                             }),
                       ),
                     ),
@@ -103,9 +97,10 @@ class AddSale extends StatelessWidget {
                             print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadSales(
-                                  direction: 0,
+                                  direction: "back",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
-                                  lastDoc: state.sales!.docs.last));
+                                  lastDoc: state.sales!.docs.first));
                             }
                           },
                           child: Container(
@@ -117,11 +112,14 @@ class AddSale extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () async {
+                            print("Is first page ${state.pageNumber}");
                             if (state.sales!.docs.length == state.limit) {
                               bloc.add(LoadSales(
-                                  direction: 1,
+                                  direction: "forward",
+                                  pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.sales!.docs.last));
+                              print(state.sales!.docs.length);
                             }
                           },
                           child: Container(

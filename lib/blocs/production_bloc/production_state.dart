@@ -16,7 +16,7 @@ class ProductionsLoaded extends ProductionState {
   final bool hasMore;
   const ProductionsLoaded(
       {this.productions,
-      this.limit = 3,
+      this.limit = 10,
       this.hasMore = true,
       this.pageNumber = 1});
 

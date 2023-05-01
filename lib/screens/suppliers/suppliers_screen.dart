@@ -2,16 +2,23 @@ import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/blocs/suppliers_bloc/suppliers_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/list_actions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Suppliers extends StatelessWidget {
+class Suppliers extends StatefulWidget {
   const Suppliers({super.key});
 
   @override
+  State<Suppliers> createState() => _SuppliersState();
+}
+
+class _SuppliersState extends State<Suppliers> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
+  @override
   Widget build(BuildContext context) {
-    List<String> items = ["3", "10", "20", "30", "50"];
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -32,7 +39,7 @@ class Suppliers extends StatelessWidget {
       ),
       body: BlocBuilder<SuppliersBloc, SuppliersState>(
         builder: (context, state) {
-          CustomersBloc bloc = context.read<CustomersBloc>();
+          SuppliersBloc bloc = context.read<SuppliersBloc>();
           if (state is SuppliersLoading) {
             return const Center(child: Text("Loading..."));
           } else if (state is SuppliersLoaded) {
@@ -54,12 +61,12 @@ class Suppliers extends StatelessWidget {
                       columns: const [
                         DataColumn(
                             label: Text(
-                          "Batch",
+                          "Name",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
                             label: Text(
-                          "Date",
+                          "Email",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
@@ -70,24 +77,9 @@ class Suppliers extends StatelessWidget {
                       ],
                       rows: state.suppliers!.docs.map((e) {
                         return DataRow(cells: [
-                          DataCell(Text(e['id'])),
-                          DataCell(Text(e['id'])),
-                          DataCell(Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.delete_outline,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              ),
-                              Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              )
-                            ],
-                          )),
+                          DataCell(Text(e['name'])),
+                          DataCell(Text(e['email'])),
+                          dataTableActions(context, e.reference),
                         ]);
                       }).toList()),
                   Row(
@@ -99,17 +91,19 @@ class Suppliers extends StatelessWidget {
                           child: DropdownButton(
                               style: TextStyle(
                                   fontSize: 12.sp, color: Colors.black),
-                              elevation: 10,
                               dropdownColor:
                                   const Color.fromARGB(255, 237, 246, 237),
-                              value: "10",
-                              items: items
-                                  .map((e) => DropdownMenuItem(
-                                      value: e, child: Text(e)))
-                                  .toList(),
+                              value: selectedCount,
+                              items: items.map((e) {
+                                return DropdownMenuItem(
+                                    value: e, child: Text(e));
+                              }).toList(),
                               onChanged: (value) {
-                                context.read<CustomersBloc>().add(
-                                    LoadCustomers(limit: int.parse(value!)));
+                                setState(() {
+                                  selectedCount = value.toString();
+                                  context.read<SuppliersBloc>().add(
+                                      LoadSuppliers(limit: int.parse(value!)));
+                                });
                               }),
                         ),
                       ),
@@ -119,10 +113,11 @@ class Suppliers extends StatelessWidget {
                             onTap: () async {
                               print("Is first page ${state.pageNumber}");
                               if (state.pageNumber > 1) {
-                                bloc.add(LoadCustomers(
-                                    direction: 0,
+                                bloc.add(LoadSuppliers(
+                                    direction: "back",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
-                                    lastDoc: state.suppliers!.docs.last));
+                                    lastDoc: state.suppliers!.docs.first));
                               }
                             },
                             child: Container(
@@ -134,11 +129,14 @@ class Suppliers extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              print("Is first page ${state.pageNumber}");
                               if (state.suppliers!.docs.length == state.limit) {
-                                bloc.add(LoadCustomers(
-                                    direction: 1,
+                                bloc.add(LoadSuppliers(
+                                    direction: "forward",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
                                     lastDoc: state.suppliers!.docs.last));
+                                print(state.suppliers!.docs.length);
                               }
                             },
                             child: Container(

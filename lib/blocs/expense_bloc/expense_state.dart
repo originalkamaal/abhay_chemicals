@@ -15,7 +15,10 @@ class ExpenseLoaded extends ExpenseState {
   final int pageNumber;
   final bool hasMore;
   const ExpenseLoaded(
-      {this.expense, this.limit = 3, this.hasMore = true, this.pageNumber = 1});
+      {this.expense,
+      this.limit = 10,
+      this.hasMore = true,
+      this.pageNumber = 1});
 
   @override
   List<Object> get props => [expense!, limit];

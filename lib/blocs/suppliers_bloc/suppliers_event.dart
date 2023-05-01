@@ -10,11 +10,14 @@ abstract class SuppliersEvent extends Equatable {
 class LoadSuppliers extends SuppliersEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
-  final int direction;
+  final String direction;
   final int pageNumber;
 
   LoadSuppliers(
-      {this.lastDoc, this.limit = 3, this.direction = 1, this.pageNumber = 1});
+      {this.lastDoc,
+      this.limit = 10,
+      this.direction = "init",
+      this.pageNumber = 1});
 }
 
 class UpdateSuppliers extends SuppliersEvent {

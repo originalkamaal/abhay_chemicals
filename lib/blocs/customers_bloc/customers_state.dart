@@ -16,7 +16,7 @@ class CustomersLoaded extends CustomerState {
   final bool hasMore;
   const CustomersLoaded(
       {this.customers,
-      this.limit = 3,
+      this.limit = 10,
       this.hasMore = true,
       this.pageNumber = 1});
 

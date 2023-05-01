@@ -5,12 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Customers extends StatelessWidget {
+import '../../widgets/list_actions_widget.dart';
+
+class Customers extends StatefulWidget {
   const Customers({super.key});
 
   @override
+  State<Customers> createState() => _CustomersState();
+}
+
+class _CustomersState extends State<Customers> {
+  List<String> items = ["10", "20", "30", "50"];
+  String selectedCount = "10";
+  @override
   Widget build(BuildContext context) {
-    List<String> items = ["3", "10", "20", "30", "50"];
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -44,7 +52,7 @@ class Customers extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(20),
                     child: const AddNewWithTitle(
-                        title: "Productions", routeName: "/addProductions"),
+                        title: "Customers", routeName: "/addProductions"),
                   ),
                   DataTable(
                       columnSpacing: 1,
@@ -53,12 +61,12 @@ class Customers extends StatelessWidget {
                       columns: const [
                         DataColumn(
                             label: Text(
-                          "Batch",
+                          "Name",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
                             label: Text(
-                          "Date",
+                          "Village",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         DataColumn(
@@ -69,24 +77,9 @@ class Customers extends StatelessWidget {
                       ],
                       rows: state.customers!.docs.map((e) {
                         return DataRow(cells: [
-                          DataCell(Text(e['batchNumber'])),
-                          DataCell(Text(e['date'])),
-                          DataCell(Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.delete_outline,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              ),
-                              Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Colors.black.withOpacity(0.3),
-                              )
-                            ],
-                          )),
+                          DataCell(Text(e['name'])),
+                          DataCell(Text(e['village'])),
+                          dataTableActions(context, e.reference),
                         ]);
                       }).toList()),
                   Row(
@@ -98,17 +91,19 @@ class Customers extends StatelessWidget {
                           child: DropdownButton(
                               style: TextStyle(
                                   fontSize: 12.sp, color: Colors.black),
-                              elevation: 10,
                               dropdownColor:
                                   const Color.fromARGB(255, 237, 246, 237),
-                              value: "10",
-                              items: items
-                                  .map((e) => DropdownMenuItem(
-                                      value: e, child: Text(e)))
-                                  .toList(),
+                              value: selectedCount,
+                              items: items.map((e) {
+                                return DropdownMenuItem(
+                                    value: e, child: Text(e));
+                              }).toList(),
                               onChanged: (value) {
-                                context.read<CustomersBloc>().add(
-                                    LoadCustomers(limit: int.parse(value!)));
+                                setState(() {
+                                  selectedCount = value.toString();
+                                  context.read<CustomersBloc>().add(
+                                      LoadCustomers(limit: int.parse(value!)));
+                                });
                               }),
                         ),
                       ),
@@ -119,9 +114,10 @@ class Customers extends StatelessWidget {
                               print("Is first page ${state.pageNumber}");
                               if (state.pageNumber > 1) {
                                 bloc.add(LoadCustomers(
-                                    direction: 0,
+                                    direction: "back",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
-                                    lastDoc: state.customers!.docs.last));
+                                    lastDoc: state.customers!.docs.first));
                               }
                             },
                             child: Container(
@@ -133,11 +129,14 @@ class Customers extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              print("Is first page ${state.pageNumber}");
                               if (state.customers!.docs.length == state.limit) {
                                 bloc.add(LoadCustomers(
-                                    direction: 1,
+                                    direction: "forward",
+                                    pageNumber: state.pageNumber,
                                     limit: state.limit,
                                     lastDoc: state.customers!.docs.last));
+                                print(state.customers!.docs.length);
                               }
                             },
                             child: Container(

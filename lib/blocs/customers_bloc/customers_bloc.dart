@@ -41,9 +41,11 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomerState> {
           .listen((Customers) {
         add(UpdateCustomers(
             customers: Customers,
-            pageNumber: event.direction == 1
+            pageNumber: event.direction == "forward"
                 ? event.pageNumber + 1
-                : event.pageNumber - 1,
+                : event.direction == "back"
+                    ? event.pageNumber - 1
+                    : event.pageNumber,
             limit: event.limit));
       });
     }

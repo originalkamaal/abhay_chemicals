@@ -39,9 +39,11 @@ class SaleBloc extends Bloc<SalesEvent, SalesState> {
           .listen((sales) {
         add(UpdateSales(
             sales: sales,
-            pageNumber: event.direction == 1
+            pageNumber: event.direction == "forward"
                 ? event.pageNumber + 1
-                : event.pageNumber - 1,
+                : event.direction == "back"
+                    ? event.pageNumber - 1
+                    : event.pageNumber,
             limit: event.limit));
       });
     }

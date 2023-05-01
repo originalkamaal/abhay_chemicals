@@ -1,9 +1,8 @@
-import 'package:abhay_chemicals/models/supplier_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class SupplierRepository {
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllSuppliers(
-      {DocumentSnapshot? lastDoc, int limit = 10, required int action});
+      {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"});
 }
 
 class SupplierController extends SupplierRepository {
@@ -14,22 +13,25 @@ class SupplierController extends SupplierRepository {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllSuppliers(
-      {DocumentSnapshot? lastDoc, int limit = 10, required int action}) {
-    print("Called prodctions");
-
+      {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
     if (lastDoc == null) {
-      return _firebaseFirestore.collection("Supplier").limit(limit).snapshots();
+      return _firebaseFirestore.collection("supplier").limit(limit).snapshots();
     } else {
-      if (action == 1) {
+      if (action == "forward") {
         return _firebaseFirestore
-            .collection("Supplier")
+            .collection("supplier")
             .startAfterDocument(lastDoc)
             .limit(limit)
             .snapshots();
+      } else if (action == "back") {
+        return _firebaseFirestore
+            .collection("supplier")
+            .endBeforeDocument(lastDoc)
+            .limitToLast(limit)
+            .snapshots();
       } else {
         return _firebaseFirestore
-            .collection("Supplier")
-            .endBeforeDocument(lastDoc)
+            .collection("supplier")
             .limit(limit)
             .snapshots();
       }
