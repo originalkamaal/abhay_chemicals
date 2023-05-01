@@ -13,7 +13,7 @@ class LoadSuppliers extends SuppliersEvent {
   final String direction;
   final int pageNumber;
 
-  LoadSuppliers(
+  const LoadSuppliers(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdateSuppliers extends SuppliersEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdateSuppliers({
+  const UpdateSuppliers({
     this.suppliers,
     this.pageNumber,
     this.limit,

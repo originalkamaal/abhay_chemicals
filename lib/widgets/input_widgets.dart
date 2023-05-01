@@ -193,6 +193,7 @@ Widget inputErrorWidget({List<String> error = const [], bool visible = false}) {
   return Visibility(
       visible: visible,
       child: Container(
+        padding: const EdgeInsets.all(1),
         child: Column(
             children: List.generate(
                 error.length,

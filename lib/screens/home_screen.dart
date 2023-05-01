@@ -112,6 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedItemColor: Colors.white,
             onTap: (index) {
               bottomTapped(index);
+              if (state.isBtmOpen == true) {
+                context.read<CommonBloc>().add(OpenBottomSheet(false));
+                Navigator.pop(context);
+              }
             },
             selectedLabelStyle:
                 TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),

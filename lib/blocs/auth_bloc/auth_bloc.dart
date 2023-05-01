@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,12 +14,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _loginEmailEvent(LoginEmailEvent event, Emitter<AuthState> emit) {
-    print(event.email);
     emit(state.copyWith(email: event.email));
   }
 
   void _loginPasswordEvent(LoginPasswordEvent event, Emitter<AuthState> emit) {
-    print(event.password);
     emit(state.copyWith(password: event.password));
   }
 

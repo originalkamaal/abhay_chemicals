@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/purchase_bloc/purchase_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                       title: "Purchases", routeName: "/addPurchases"),
                 ),
                 DataTable(
+                    showCheckboxColumn: false,
                     columnSpacing: 1,
                     headingRowColor: MaterialStateProperty.resolveWith<Color>(
                         (states) => const Color.fromARGB(255, 237, 246, 237)),
@@ -62,12 +64,43 @@ class _AddPurchaseState extends State<AddPurchase> {
                       ))
                     ],
                     rows: state.purchases!.docs.map((e) {
-                      return DataRow(cells: [
-                        DataCell(Text(e['batchNumber'])),
-                        DataCell(Text(e['date'])),
-                        DataCell(Text(e['item'])),
-                        dataTableActions(context, e.reference),
-                      ]);
+                      return DataRow(
+                          onSelectChanged: (value) {
+                            Scaffold.of(context)
+                                .showBottomSheet((context) => Container(
+                                      height: 350.h,
+                                      color: const Color.fromARGB(
+                                          255, 237, 246, 237),
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                context
+                                                    .read<CommonBloc>()
+                                                    .add(OpenBottomSheet(true));
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                            context
+                                .read<CommonBloc>()
+                                .add(OpenBottomSheet(true));
+                          },
+                          cells: [
+                            DataCell(Text(e['batchNumber'])),
+                            DataCell(Text(e['date'])),
+                            DataCell(Text(e['item'])),
+                            dataTableActions(context, e.reference),
+                          ]);
                     }).toList()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +130,6 @@ class _AddPurchaseState extends State<AddPurchase> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadPurchases(
                                   direction: "back",
@@ -115,14 +147,12 @@ class _AddPurchaseState extends State<AddPurchase> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.purchases!.docs.length == state.limit) {
                               bloc.add(LoadPurchases(
                                   direction: "forward",
                                   pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.purchases!.docs.last));
-                              print(state.purchases!.docs.length);
                             }
                           },
                           child: Container(
@@ -141,7 +171,7 @@ class _AddPurchaseState extends State<AddPurchase> {
             ),
           );
         } else {
-          return Text("Error");
+          return const Text("Error");
         }
       },
     );

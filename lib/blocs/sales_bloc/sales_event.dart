@@ -13,7 +13,7 @@ class LoadSales extends SalesEvent {
   final String direction;
   final int pageNumber;
 
-  LoadSales(
+  const LoadSales(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdateSales extends SalesEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdateSales({
+  const UpdateSales({
     this.sales,
     this.pageNumber,
     this.limit,

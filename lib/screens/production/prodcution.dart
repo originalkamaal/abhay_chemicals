@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:flutter/material.dart';
@@ -67,9 +68,32 @@ class _AddProductionState extends State<AddProduction> {
                           onSelectChanged: (value) {
                             Scaffold.of(context)
                                 .showBottomSheet((context) => Container(
-                                      color: Colors.red,
-                                      height: 500,
+                                      height: 350.h,
+                                      color: const Color.fromARGB(
+                                          255, 237, 246, 237),
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                context
+                                                    .read<CommonBloc>()
+                                                    .add(OpenBottomSheet(true));
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ));
+                            context
+                                .read<CommonBloc>()
+                                .add(OpenBottomSheet(true));
                           });
                     }).toList()),
                 Row(
@@ -100,7 +124,6 @@ class _AddProductionState extends State<AddProduction> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadProductions(
                                   direction: "back",
@@ -118,14 +141,12 @@ class _AddProductionState extends State<AddProduction> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.productions!.docs.length == state.limit) {
                               bloc.add(LoadProductions(
                                   direction: "forward",
                                   pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.productions!.docs.last));
-                              print(state.productions!.docs.length);
                             }
                           },
                           child: Container(

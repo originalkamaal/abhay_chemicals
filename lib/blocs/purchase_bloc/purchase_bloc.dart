@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:abhay_chemicals/controllers/purchase_controller.dart';
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'purchase_event.dart';
 part 'purchase_state.dart';
@@ -34,7 +33,6 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
         add(UpdatePurchases(purchases: purchases, pageNumber: 1, limit: limit));
       });
     } else {
-      print("Last doc is there");
       _purchaseSubscription = _purchaseController
           .getAllPurchases(
               lastDoc: event.lastDoc, limit: limit, action: event.direction)

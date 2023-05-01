@@ -13,7 +13,7 @@ class LoadExpense extends ExpenseEvent {
   final String direction;
   final int pageNumber;
 
-  LoadExpense(
+  const LoadExpense(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdateExpense extends ExpenseEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdateExpense({
+  const UpdateExpense({
     this.expense,
     this.pageNumber,
     this.limit,

@@ -13,7 +13,7 @@ class LoadPurchases extends PurchaseEvent {
   final String direction;
   final int pageNumber;
 
-  LoadPurchases(
+  const LoadPurchases(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdatePurchases extends PurchaseEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdatePurchases({
+  const UpdatePurchases({
     this.purchases,
     this.pageNumber,
     this.limit,

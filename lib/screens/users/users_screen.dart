@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/user_bloc/user_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:abhay_chemicals/widgets/list_actions_widget.dart';
@@ -53,6 +54,7 @@ class _UsersState extends State<Users> {
                         title: "Users", routeName: "/addProductions"),
                   ),
                   DataTable(
+                      showCheckboxColumn: false,
                       columnSpacing: 1,
                       headingRowColor: MaterialStateProperty.resolveWith<Color>(
                           (states) => const Color.fromARGB(255, 237, 246, 237)),
@@ -74,11 +76,42 @@ class _UsersState extends State<Users> {
                         ))
                       ],
                       rows: state.users!.docs.map((e) {
-                        return DataRow(cells: [
-                          DataCell(Text(e['name'])),
-                          DataCell(Text(e['email'])),
-                          dataTableActions(context, e.reference),
-                        ]);
+                        return DataRow(
+                            cells: [
+                              DataCell(Text(e['name'])),
+                              DataCell(Text(e['email'])),
+                              dataTableActions(context, e.reference),
+                            ],
+                            onSelectChanged: (value) {
+                              Scaffold.of(context).showBottomSheet((context) =>
+                                  Container(
+                                    height: 350.h,
+                                    color: const Color.fromARGB(
+                                        255, 237, 246, 237),
+                                    child: Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.black,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              context
+                                                  .read<CommonBloc>()
+                                                  .add(OpenBottomSheet(true));
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                              context
+                                  .read<CommonBloc>()
+                                  .add(OpenBottomSheet(true));
+                            });
                       }).toList()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,7 +143,6 @@ class _UsersState extends State<Users> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              print("Is first page ${state.pageNumber}");
                               if (state.pageNumber > 1) {
                                 bloc.add(LoadUsers(
                                     direction: "back",
@@ -128,14 +160,12 @@ class _UsersState extends State<Users> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              print("Is first page ${state.pageNumber}");
                               if (state.users!.docs.length == state.limit) {
                                 bloc.add(LoadUsers(
                                     direction: "forward",
                                     pageNumber: state.pageNumber,
                                     limit: state.limit,
                                     lastDoc: state.users!.docs.last));
-                                print(state.users!.docs.length);
                               }
                             },
                             child: Container(

@@ -1,4 +1,4 @@
-import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +37,7 @@ class _AddSaleState extends State<AddSale> {
                       title: "Sales", routeName: "/addSales"),
                 ),
                 DataTable(
+                    showCheckboxColumn: false,
                     columnSpacing: 1,
                     headingRowColor: MaterialStateProperty.resolveWith<Color>(
                         (states) => const Color.fromARGB(255, 237, 246, 237)),
@@ -58,12 +59,42 @@ class _AddSaleState extends State<AddSale> {
                       ))
                     ],
                     rows: state.sales!.docs.map((e) {
-                      print(e);
-                      return DataRow(cells: [
-                        DataCell(Text(e['challanNumber'].toString())),
-                        DataCell(Text(e['date'])),
-                        dataTableActions(context, e.reference),
-                      ]);
+                      return DataRow(
+                          onSelectChanged: (value) {
+                            Scaffold.of(context)
+                                .showBottomSheet((context) => Container(
+                                      height: 350.h,
+                                      color: const Color.fromARGB(
+                                          255, 237, 246, 237),
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                context
+                                                    .read<CommonBloc>()
+                                                    .add(OpenBottomSheet(true));
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                            context
+                                .read<CommonBloc>()
+                                .add(OpenBottomSheet(true));
+                          },
+                          cells: [
+                            DataCell(Text(e['challanNumber'].toString())),
+                            DataCell(Text(e['date'])),
+                            dataTableActions(context, e.reference),
+                          ]);
                     }).toList()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +125,6 @@ class _AddSaleState extends State<AddSale> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.pageNumber > 1) {
                               bloc.add(LoadSales(
                                   direction: "back",
@@ -112,14 +142,12 @@ class _AddSaleState extends State<AddSale> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            print("Is first page ${state.pageNumber}");
                             if (state.sales!.docs.length == state.limit) {
                               bloc.add(LoadSales(
                                   direction: "forward",
                                   pageNumber: state.pageNumber,
                                   limit: state.limit,
                                   lastDoc: state.sales!.docs.last));
-                              print(state.sales!.docs.length);
                             }
                           },
                           child: Container(

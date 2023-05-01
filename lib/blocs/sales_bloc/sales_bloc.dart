@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:abhay_chemicals/controllers/sales_controller.dart';
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'sales_event.dart';
 part 'sales_state.dart';
@@ -32,7 +32,6 @@ class SaleBloc extends Bloc<SalesEvent, SalesState> {
         add(UpdateSales(sales: sales, pageNumber: 1, limit: limit));
       });
     } else {
-      print("Last doc is there");
       _productSubscription = _saleController
           .getAllSales(
               lastDoc: event.lastDoc, limit: limit, action: event.direction)

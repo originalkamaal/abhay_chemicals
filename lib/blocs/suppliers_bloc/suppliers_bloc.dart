@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:abhay_chemicals/controllers/supplier_controller.dart';
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'suppliers_event.dart';
 part 'suppliers_state.dart';
@@ -33,7 +33,6 @@ class SuppliersBloc extends Bloc<SuppliersEvent, SuppliersState> {
         add(UpdateSuppliers(suppliers: suppliers, pageNumber: 1, limit: limit));
       });
     } else {
-      print("Last doc is there");
       _productSubscription = _supplierController
           .getAllSuppliers(
               lastDoc: event.lastDoc, limit: limit, action: event.direction)

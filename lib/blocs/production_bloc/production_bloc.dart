@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:abhay_chemicals/controllers/production_controller.dart';
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'production_event.dart';
 part 'production_state.dart';
@@ -34,7 +34,6 @@ class ProductionBloc extends Bloc<ProductionEvent, ProductionState> {
             productions: productions, pageNumber: 1, limit: limit));
       });
     } else {
-      print("Last doc is there");
       _productSubscription = _productionController
           .getAllProductions(
               lastDoc: event.lastDoc, limit: limit, action: event.direction)

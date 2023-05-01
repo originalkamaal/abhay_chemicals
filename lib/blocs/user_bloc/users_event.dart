@@ -13,7 +13,7 @@ class LoadUsers extends UsersEvent {
   final String direction;
   final int pageNumber;
 
-  LoadUsers(
+  const LoadUsers(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdateUsers extends UsersEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdateUsers({
+  const UpdateUsers({
     this.users,
     this.pageNumber,
     this.limit,

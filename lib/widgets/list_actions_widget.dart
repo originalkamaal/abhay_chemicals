@@ -1,12 +1,8 @@
 import 'package:abhay_chemicals/widgets/confirm_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 DataCell dataTableActions(context, DocumentReference<Map<String, dynamic>> e) {
-  final user = FirebaseAuth.instance.currentUser;
-
   return DataCell(Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     crossAxisAlignment: CrossAxisAlignment.center,

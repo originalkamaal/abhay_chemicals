@@ -13,7 +13,7 @@ class LoadProductions extends ProductionEvent {
   final String direction;
   final int pageNumber;
 
-  LoadProductions(
+  const LoadProductions(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
@@ -25,7 +25,7 @@ class UpdateProductions extends ProductionEvent {
   final int? pageNumber;
   final int? limit;
 
-  UpdateProductions({
+  const UpdateProductions({
     this.productions,
     this.pageNumber,
     this.limit,

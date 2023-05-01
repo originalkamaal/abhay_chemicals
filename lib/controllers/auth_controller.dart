@@ -22,9 +22,7 @@ class AuthController {
       await FirebaseAuth.instance.signOut().then((value) =>
           Navigator.of(context)
               .pushNamedAndRemoveUntil("/signin", (route) => false));
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   void handleLoginIn(String type) async {
@@ -35,42 +33,30 @@ class AuthController {
         String userPassword = state.password;
 
         if (emailAddress.isEmpty) {
-          print("email is empty");
-
           return;
         }
         if (userPassword.isEmpty) {
-          print("password is empty");
-
           return;
         }
         try {
           final creds = await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: emailAddress, password: userPassword);
-          print(creds);
 
           if (creds.user != null) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/home', (route) => false);
           } else if (creds.user == null) {
-            print("error from creds.user == null");
             return;
           }
-          if (!creds.user!.emailVerified) {
-            print("not verified");
-          }
+          if (!creds.user!.emailVerified) {}
         } on FirebaseAuthException catch (e) {
           if (e.code == "user-not-found") {
-            print(e.code);
             return;
           } else if (e.code == "wrong-password") {
-            print(e.code);
             return;
           }
         }
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

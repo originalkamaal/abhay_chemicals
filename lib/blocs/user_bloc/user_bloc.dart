@@ -32,7 +32,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         add(UpdateUsers(users: users, pageNumber: 1, limit: limit));
       });
     } else {
-      print("Last doc is there");
       _productSubscription = _usersController
           .getAllUsers(
               lastDoc: event.lastDoc, limit: limit, action: event.direction)

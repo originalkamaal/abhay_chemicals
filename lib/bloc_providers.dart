@@ -26,27 +26,27 @@ class AppBlocProviders {
         BlocProvider(
             create: (_) =>
                 ProductionBloc(productionController: ProductionController())
-                  ..add(LoadProductions())),
+                  ..add(const LoadProductions())),
         BlocProvider(
             create: (_) =>
                 CustomersBloc(customersController: CustomersController())
-                  ..add(LoadCustomers())),
+                  ..add(const LoadCustomers())),
         BlocProvider(
-            create: (_) =>
-                SaleBloc(saleController: SalesController())..add(LoadSales())),
+            create: (_) => SaleBloc(saleController: SalesController())
+              ..add(const LoadSales())),
         BlocProvider(
             create: (_) =>
                 PurchaseBloc(purchaseController: PurchaseController())
-                  ..add(LoadPurchases())),
+                  ..add(const LoadPurchases())),
         BlocProvider(
             create: (_) => ExpenseBloc(expenseController: ExpenseController())
-              ..add(LoadExpense())),
+              ..add(const LoadExpense())),
         BlocProvider(
             create: (_) =>
                 SuppliersBloc(supplierController: SupplierController())
-                  ..add(LoadSuppliers())),
+                  ..add(const LoadSuppliers())),
         BlocProvider(
-            create: (_) =>
-                UsersBloc(usersController: UsersController())..add(LoadUsers()))
+            create: (_) => UsersBloc(usersController: UsersController())
+              ..add(const LoadUsers()))
       ];
 }
