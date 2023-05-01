@@ -1,5 +1,5 @@
+import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
-import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +55,7 @@ class _CustomersState extends State<Customers> {
                         title: "Customers", routeName: "/addProductions"),
                   ),
                   DataTable(
+                      showCheckboxColumn: false,
                       columnSpacing: 1,
                       headingRowColor: MaterialStateProperty.resolveWith<Color>(
                           (states) => const Color.fromARGB(255, 237, 246, 237)),
@@ -76,11 +77,42 @@ class _CustomersState extends State<Customers> {
                         ))
                       ],
                       rows: state.customers!.docs.map((e) {
-                        return DataRow(cells: [
-                          DataCell(Text(e['name'])),
-                          DataCell(Text(e['village'])),
-                          dataTableActions(context, e.reference),
-                        ]);
+                        return DataRow(
+                            onSelectChanged: (value) {
+                              Scaffold.of(context).showBottomSheet((context) =>
+                                  Container(
+                                    height: 350.h,
+                                    color: const Color.fromARGB(
+                                        255, 237, 246, 237),
+                                    child: Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.black,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              context
+                                                  .read<CommonBloc>()
+                                                  .add(OpenBottomSheet(true));
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                              context
+                                  .read<CommonBloc>()
+                                  .add(OpenBottomSheet(true));
+                            },
+                            cells: [
+                              DataCell(Text(e['name'])),
+                              DataCell(Text(e['village'])),
+                              dataTableActions(context, e.reference),
+                            ]);
                       }).toList()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +143,6 @@ class _CustomersState extends State<Customers> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              print("Is first page ${state.pageNumber}");
                               if (state.pageNumber > 1) {
                                 bloc.add(LoadCustomers(
                                     direction: "back",
@@ -129,14 +160,12 @@ class _CustomersState extends State<Customers> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              print("Is first page ${state.pageNumber}");
                               if (state.customers!.docs.length == state.limit) {
                                 bloc.add(LoadCustomers(
                                     direction: "forward",
                                     pageNumber: state.pageNumber,
                                     limit: state.limit,
                                     lastDoc: state.customers!.docs.last));
-                                print(state.customers!.docs.length);
                               }
                             },
                             child: Container(

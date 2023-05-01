@@ -14,8 +14,6 @@ class SalesController extends SalesRepository {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllSales(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
-    print("Called prodctions");
-
     if (lastDoc == null) {
       return _firebaseFirestore.collection("sales").limit(limit).snapshots();
     } else {

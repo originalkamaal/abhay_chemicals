@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 
 class MyRoutes {
   static Route<dynamic> generateRoutes(RouteSettings routeSettings) {
-    final args = routeSettings.arguments;
-
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(builder: (context) => SplashScreen());
