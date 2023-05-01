@@ -32,14 +32,6 @@ DataCell dataTableActions(context, DocumentReference<Map<String, dynamic>> e) {
           color: Colors.black.withOpacity(0.3),
         ),
       ),
-      GestureDetector(
-        onTap: () {},
-        child: Icon(
-          Icons.remove_red_eye,
-          size: 20,
-          color: Colors.black.withOpacity(0.3),
-        ),
-      )
     ],
   ));
 }

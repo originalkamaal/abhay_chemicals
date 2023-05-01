@@ -1,6 +1,7 @@
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/pagination_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,31 +80,36 @@ class _CustomersState extends State<Customers> {
                       rows: state.customers!.docs.map((e) {
                         return DataRow(
                             onSelectChanged: (value) {
-                              Scaffold.of(context).showBottomSheet((context) =>
-                                  Container(
-                                    height: 350.h,
-                                    color: const Color.fromARGB(
-                                        255, 237, 246, 237),
-                                    child: Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              Icons.close,
-                                              color: Colors.black,
+                              showModalBottomSheet(
+                                  isDismissible: false,
+                                  isScrollControlled: false,
+                                  context: context,
+                                  builder: (context) => Container(
+                                        height: 350.h,
+                                        color: const Color.fromARGB(
+                                            255, 237, 246, 237),
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.black,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  context
+                                                      .read<CommonBloc>()
+                                                      .add(OpenBottomSheet(
+                                                          true));
+                                                },
+                                              ),
                                             ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              context
-                                                  .read<CommonBloc>()
-                                                  .add(OpenBottomSheet(true));
-                                            },
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ));
+                                      ),
+                                  enableDrag: false);
                               context
                                   .read<CommonBloc>()
                                   .add(OpenBottomSheet(true));
@@ -114,73 +120,8 @@ class _CustomersState extends State<Customers> {
                               dataTableActions(context, e.reference),
                             ]);
                       }).toList()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton(
-                              style: TextStyle(
-                                  fontSize: 12.sp, color: Colors.black),
-                              dropdownColor:
-                                  const Color.fromARGB(255, 237, 246, 237),
-                              value: selectedCount,
-                              items: items.map((e) {
-                                return DropdownMenuItem(
-                                    value: e, child: Text(e));
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCount = value.toString();
-                                  context.read<CustomersBloc>().add(
-                                      LoadCustomers(limit: int.parse(value!)));
-                                });
-                              }),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              if (state.pageNumber > 1) {
-                                bloc.add(LoadCustomers(
-                                    direction: "back",
-                                    pageNumber: state.pageNumber,
-                                    limit: state.limit,
-                                    lastDoc: state.customers!.docs.first));
-                              }
-                            },
-                            child: Container(
-                              color: const Color.fromARGB(255, 237, 246, 237),
-                              padding: const EdgeInsets.all(5),
-                              child:
-                                  const Center(child: Icon(Icons.chevron_left)),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              if (state.customers!.docs.length == state.limit) {
-                                bloc.add(LoadCustomers(
-                                    direction: "forward",
-                                    pageNumber: state.pageNumber,
-                                    limit: state.limit,
-                                    lastDoc: state.customers!.docs.last));
-                              }
-                            },
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 20),
-                              color: const Color.fromARGB(255, 237, 246, 237),
-                              padding: const EdgeInsets.all(5),
-                              child: const Center(
-                                  child: Icon(Icons.chevron_right)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  PaginationController<CustomersBloc, CustomerState>(
+                      bloc: bloc, context: context, state: state),
                 ],
               ),
             );

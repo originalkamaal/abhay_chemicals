@@ -64,8 +64,11 @@ class _AddExpenseState extends State<AddExpense> {
                     rows: state.expense!.docs.map((e) {
                       return DataRow(
                           onSelectChanged: (value) {
-                            Scaffold.of(context)
-                                .showBottomSheet((context) => Container(
+                            showModalBottomSheet(
+                                isDismissible: false,
+                                isScrollControlled: false,
+                                context: context,
+                                builder: (context) => Container(
                                       height: 350.h,
                                       color: const Color.fromARGB(
                                           255, 237, 246, 237),
@@ -88,7 +91,8 @@ class _AddExpenseState extends State<AddExpense> {
                                           ),
                                         ],
                                       ),
-                                    ));
+                                    ),
+                                enableDrag: false);
                             context
                                 .read<CommonBloc>()
                                 .add(OpenBottomSheet(true));
