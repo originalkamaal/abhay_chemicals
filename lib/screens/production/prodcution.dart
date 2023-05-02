@@ -1,7 +1,12 @@
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
+import 'package:abhay_chemicals/controllers/production_controller.dart';
+import 'package:abhay_chemicals/controllers/purchase_controller.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/purchase_table_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,6 +22,32 @@ class AddProduction extends StatefulWidget {
 class _AddProductionState extends State<AddProduction> {
   List<String> items = ["10", "20", "30", "50"];
   String selectedCount = "10";
+  double bottomSheetHeight = 450;
+
+  late TextEditingController dateController;
+
+  DateTime selectedDate = DateTime.now();
+  String stateof = "";
+  String? palti;
+  int? temparature;
+  String? notes;
+  bool paltiErr = false;
+  bool tempError = false;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: selectedDate,
+        lastDate: DateTime(DateTime.now().year + 1));
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductionBloc, ProductionState>(
@@ -66,35 +97,604 @@ class _AddProductionState extends State<AddProduction> {
                           dataTableActions(context, e.reference),
                         ],
                         onSelectChanged: (value) {
+                          // ignore: use_build_context_synchronously
                           showModalBottomSheet(
-                              isDismissible: false,
-                              isScrollControlled: false,
-                              context: context,
-                              builder: (context) => Container(
-                                    height: 350.h,
-                                    color: const Color.fromARGB(
-                                        255, 237, 246, 237),
-                                    child: Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              Icons.close,
-                                              color: Colors.black,
+                            isScrollControlled: true,
+                            useSafeArea: true,
+                            enableDrag: false,
+                            context: context,
+                            backgroundColor:
+                                const Color.fromARGB(255, 237, 246, 237),
+                            builder: (context) => FutureBuilder(
+                                future: PurchaseController()
+                                    .getBatchPurchases(e['batchNumber']),
+                                builder: (context, docs) {
+                                  if (docs.hasData) {
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                context
+                                                    .read<CommonBloc>()
+                                                    .add(OpenBottomSheet(true));
+                                              },
                                             ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              context
-                                                  .read<CommonBloc>()
-                                                  .add(OpenBottomSheet(true));
-                                            },
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                              enableDrag: false);
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 8, right: 8, bottom: 10),
+                                            width: double.maxFinite,
+                                            child: Card(
+                                              elevation: 5,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: const [
+                                                          Text(
+                                                              "Batch Number : "),
+                                                          Text("Date :"),
+                                                          Text("Quantities :"),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                              e['batchNumber']),
+                                                          Text(e['date']),
+                                                          Text(docs.data![
+                                                                  'totalQuantities']
+                                                              .toString())
+                                                        ],
+                                                      )
+                                                    ]),
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
+                                              visible: (docs.data!['docs']
+                                                      as QuerySnapshot)
+                                                  .docs
+                                                  .isNotEmpty,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20,
+                                                    bottom: 10,
+                                                    top: 10),
+                                                child: const Text(
+                                                  "Raw Materials",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              )),
+                                          Visibility(
+                                            visible: (docs.data!['docs']
+                                                    as QuerySnapshot)
+                                                .docs
+                                                .isNotEmpty,
+                                            child: Center(
+                                              child: Card(
+                                                elevation: 5,
+                                                child: DataTable(
+                                                    headingRowHeight: 40,
+                                                    columns: const [
+                                                      DataColumn(
+                                                          label: Text("Date")),
+                                                      DataColumn(
+                                                          label:
+                                                              Text("Truck No")),
+                                                      DataColumn(
+                                                          label:
+                                                              Text("Quantity")),
+                                                    ],
+                                                    rows: (docs.data!['docs']
+                                                            as QuerySnapshot)
+                                                        .docs
+                                                        .map((ed) {
+                                                      return DataRow(cells: [
+                                                        DataCell(
+                                                            Text(ed['date'])),
+                                                        DataCell(Text(
+                                                            ed['truckNumber']
+                                                                .toString())),
+                                                        DataCell(Text(
+                                                            ed['quantity']
+                                                                .toString())),
+                                                      ]);
+                                                    }).toList()),
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20,
+                                                    bottom: 10,
+                                                    top: 20),
+                                                child: const Text(
+                                                  "Composting",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 34, 78, 12),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                margin: const EdgeInsets.only(
+                                                    left: 20,
+                                                    top: 10,
+                                                    bottom: 5,
+                                                    right: 20),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 10),
+                                                child: const Text(
+                                                  "Edit",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8, bottom: 8),
+                                            child: Center(
+                                              child: Card(
+                                                elevation: 5,
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  child: DataTable(
+                                                      headingRowHeight: 40,
+                                                      columns: const [
+                                                        DataColumn(
+                                                            label:
+                                                                Text("Date")),
+                                                        DataColumn(
+                                                            label:
+                                                                Text("Notes")),
+                                                      ],
+                                                      rows: [
+                                                        DataRow(cells: [
+                                                          DataCell(Text(
+                                                              e['composite']
+                                                                  ['date'])),
+                                                          DataCell(Text(
+                                                              e['composite']
+                                                                  ['note']))
+                                                        ])
+                                                      ]),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20,
+                                                    bottom: 10,
+                                                    top: 20),
+                                                child: const Text(
+                                                  "Enrichment",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 34, 78, 12),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                margin: const EdgeInsets.only(
+                                                    left: 20,
+                                                    top: 10,
+                                                    bottom: 5,
+                                                    right: 20),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 10),
+                                                child: const Text(
+                                                  "Edit",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8, bottom: 8),
+                                            child: Center(
+                                              child: Card(
+                                                elevation: 5,
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  child: DataTable(
+                                                      headingRowHeight: 40,
+                                                      columns: const [
+                                                        DataColumn(
+                                                            label:
+                                                                Text("Date")),
+                                                        DataColumn(
+                                                            label:
+                                                                Text("Notes")),
+                                                      ],
+                                                      rows: [
+                                                        DataRow(cells: [
+                                                          DataCell(Text(
+                                                              e['enrichment']
+                                                                  ['date'])),
+                                                          DataCell(Text(
+                                                              e['enrichment']
+                                                                  ['note']))
+                                                        ])
+                                                      ]),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20,
+                                                    bottom: 10,
+                                                    top: 20),
+                                                child: const Text(
+                                                  "Palti Reports",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  setState(() {
+                                                    stateof = e['batchNumber'];
+                                                    palti = "";
+                                                    temparature = 30;
+                                                    paltiErr = false;
+                                                    tempError = false;
+                                                    notes = "";
+                                                  });
+                                                  // ignore: use_build_context_synchronously
+                                                  return await showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          content: Form(
+                                                              child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Center(
+                                                                child: Text(
+                                                                    "Add New Palti Record"),
+                                                              ),
+                                                              Visibility(
+                                                                visible: tempError ==
+                                                                        true &&
+                                                                    stateof ==
+                                                                        e['batchNumber'],
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "Something Went Wrong..",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        fontSize:
+                                                                            12.sp),
+                                                                  ),
+                                                                ),
+                                                              ),
+
+                                                              Row(
+                                                                children: [
+                                                                  Text("${selectedDate.toLocal()}"
+                                                                      .split(
+                                                                          ' ')[0]),
+                                                                  TextButton(
+                                                                      onPressed: () =>
+                                                                          _selectDate(
+                                                                              context),
+                                                                      child: const Text(
+                                                                          "Select Date"))
+                                                                ],
+                                                              ),
+                                                              TextField(
+                                                                controller:
+                                                                    TextEditingController(
+                                                                        text:
+                                                                            palti),
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .text,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        hintText:
+                                                                            "Palti"),
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setState(() {
+                                                                    palti =
+                                                                        value;
+                                                                  });
+                                                                },
+                                                              ),
+                                                              TextField(
+                                                                controller: TextEditingController(
+                                                                    text: temparature
+                                                                        .toString()),
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        hintText:
+                                                                            "Temperature"),
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setState(() {
+                                                                    temparature =
+                                                                        int.parse(
+                                                                            value);
+                                                                  });
+                                                                },
+                                                              ),
+                                                              TextField(
+                                                                controller:
+                                                                    TextEditingController(
+                                                                        text:
+                                                                            notes),
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .text,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        hintText:
+                                                                            "Notes"),
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setState(() {
+                                                                    notes =
+                                                                        value;
+                                                                  });
+                                                                },
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          palti =
+                                                                              "";
+                                                                          temparature =
+                                                                              30;
+                                                                          notes =
+                                                                              "";
+                                                                          stateof =
+                                                                              "";
+                                                                        });
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      child: Text(
+                                                                          "Cancel")),
+                                                                  ElevatedButton(
+                                                                      onPressed:
+                                                                          () async {
+                                                                        if (palti !=
+                                                                            "") {
+                                                                          print(
+                                                                              palti!.length);
+                                                                          bool status = await ProductionController().addNewPalti(
+                                                                              e.reference,
+                                                                              selectedDate.toString(),
+                                                                              palti!,
+                                                                              temparature!,
+                                                                              notes!);
+                                                                          if (status =
+                                                                              true) {
+                                                                            Navigator.pop(context);
+                                                                          }
+                                                                        } else {
+                                                                          setState(
+                                                                              () {
+                                                                            tempError =
+                                                                                true;
+                                                                            stateof =
+                                                                                e['batchNumber'];
+                                                                          });
+                                                                        }
+                                                                      },
+                                                                      child: Text(
+                                                                          "Submit"))
+                                                                ],
+                                                              )
+
+                                                              // DatePickerDialog(
+                                                              //   restorationId:
+                                                              //       'date_picker_dialog',
+                                                              //   initialEntryMode:
+                                                              //       DatePickerEntryMode
+                                                              //           .calendarOnly,
+                                                              //   initialDate:
+                                                              //       DateTime
+                                                              //           .now(),
+                                                              //   firstDate:
+                                                              //       DateTime
+                                                              //           .now(),
+                                                              //   lastDate: DateTime(
+                                                              //       DateTime.now()
+                                                              //               .year +
+                                                              //           1),
+                                                              // )
+                                                            ],
+                                                          )),
+                                                        );
+                                                      });
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 34, 78, 12),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  margin: const EdgeInsets.only(
+                                                      left: 20,
+                                                      top: 10,
+                                                      bottom: 5,
+                                                      right: 20),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 10),
+                                                  child: const Text(
+                                                    "Add New",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Visibility(
+                                            visible:
+                                                e['paltiReport'].isNotEmpty,
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8, bottom: 8),
+                                              child: Center(
+                                                child: Card(
+                                                  elevation: 5,
+                                                  child: SizedBox(
+                                                    width: double.infinity,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: DataTable(
+                                                        columns: const [
+                                                          DataColumn(
+                                                            label: Text("Date"),
+                                                          ),
+                                                          DataColumn(
+                                                            label:
+                                                                Text("Palti"),
+                                                          ),
+                                                          DataColumn(
+                                                            label: Text(
+                                                                "Temperature"),
+                                                          ),
+                                                          DataColumn(
+                                                            label:
+                                                                Text("Notes"),
+                                                          ),
+                                                        ],
+                                                        rows: (e['paltiReport']
+                                                                as List<
+                                                                    dynamic>)
+                                                            .map((keyvalue) {
+                                                          return DataRow(
+                                                              cells: [
+                                                                DataCell(Text(
+                                                                    keyvalue[
+                                                                        'date'])),
+                                                                DataCell(Text(keyvalue[
+                                                                        'palti']
+                                                                    .toString())),
+                                                                DataCell(Text(keyvalue[
+                                                                        'temperature']
+                                                                    .toString())),
+                                                                DataCell(Text(keyvalue[
+                                                                        'note']
+                                                                    .toString())),
+                                                              ]);
+                                                        }).toList(),
+                                                      ),
+                                                    ),
+
+                                                    ///////Need to implement palti Report here
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    return const Text("Loading..");
+                                  }
+                                }),
+                          );
                           context.read<CommonBloc>().add(OpenBottomSheet(true));
                         },
                       );
@@ -172,5 +772,11 @@ class _AddProductionState extends State<AddProduction> {
         }
       },
     );
+  }
+
+  purchaseDataTable(QuerySnapshot<Map<String, dynamic>> data) {
+    data.docs.map((e) {
+      return const Text("e");
+    });
   }
 }

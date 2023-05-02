@@ -11,6 +11,25 @@ class PurchaseController extends PurchaseRepository {
   PurchaseController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future<Map> getBatchPurchases(String batchNumber) async {
+    int totalQuantities = 0;
+    QuerySnapshot<Map<String, dynamic>> documentSnapshots =
+        await _firebaseFirestore
+            .collection("purchase")
+            .where("batchNumber", isEqualTo: batchNumber)
+            .get();
+
+    for (var i = 0; i < documentSnapshots.docs.length; i++) {
+      totalQuantities =
+          (totalQuantities + documentSnapshots.docs[i]['quantity']).toInt();
+    }
+
+    return {
+      "totalQuantities": totalQuantities.toString(),
+      "docs": documentSnapshots
+    };
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {

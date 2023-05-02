@@ -11,6 +11,20 @@ class ProductionController extends ProductionRepository {
   ProductionController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future<bool> addNewPalti(DocumentReference e, String date, String palti,
+      int temp, String notes) async {
+    bool status = false;
+    status = await e.update({
+      "paltiReport": FieldValue.arrayUnion([
+        {"date": date, "palti": palti, "temperature": temp, "note": notes}
+      ])
+    }).then((value) {
+      return true;
+    });
+
+    return status;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductions(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
