@@ -57,6 +57,80 @@ Widget reusableText(String text, double topPadding) {
   );
 }
 
+Widget buildDateInput(
+    {String placeHolder = "",
+    String inputType = "",
+    String iconName = "",
+    void Function()? onTap,
+    TextEditingController? controller}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.w),
+            border: Border.all(color: AppColors.primaryThreeElementText)),
+        width: double.maxFinite,
+        height: 50.w,
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 17.w),
+              child: inputType == "mobile"
+                  ? const Text("+91")
+                  : Image.asset(
+                      "assets/icons/$iconName.png",
+                      height: 16.w,
+                      width: 16.w,
+                    ),
+            ),
+            Expanded(
+              child: TextFormField(
+                enabled: false,
+                controller: controller,
+                obscureText: inputType == "password" ? true : false,
+                keyboardType: inputType == "mobile"
+                    ? TextInputType.phone
+                    : TextInputType.name,
+                style: TextStyle(
+                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12.sp,
+                    height: 1.5.w),
+                decoration: InputDecoration(
+                  hintText: placeHolder,
+                  contentPadding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  disabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  hintStyle: TextStyle(
+                      height: 1.5.w,
+                      color: AppColors.primarySecondaryElementText),
+                ),
+              ),
+            ),
+          ],
+        )),
+  );
+}
+
 Widget buildTextInput(
     {String placeHolder = "",
     String inputType = "",

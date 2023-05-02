@@ -26,6 +26,21 @@ class ProductionController extends ProductionRepository {
     return status;
   }
 
+  Future<bool> addProduction(String date, String batchNumber) async {
+    bool status = false;
+    status = await _firebaseFirestore.collection("production").add({
+      "batchNumber": batchNumber,
+      "date": date,
+      "enrichment": {"date": "", "note": ""},
+      "composite": {"date": "", "note": ""},
+      "lastPalti": [],
+      "paltiReport": [],
+    }).then((value) {
+      return true;
+    });
+    return status;
+  }
+
   Future<bool> editCompEnrich(
       DocumentReference e, String date, String notes, bool isComposting) async {
     bool status = false;

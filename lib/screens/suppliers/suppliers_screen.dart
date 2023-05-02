@@ -80,7 +80,7 @@ class _SuppliersState extends State<Suppliers> {
                           cells: [
                             DataCell(Text(e['name'])),
                             DataCell(Text(e['email'])),
-                            dataTableActions(context, e.reference),
+                            dataTableActions(context, e, "/"),
                           ],
                           onSelectChanged: (value) {
                             showModalBottomSheet(

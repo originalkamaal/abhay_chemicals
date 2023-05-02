@@ -101,7 +101,7 @@ class _AddExpenseState extends State<AddExpense> {
                             DataCell(Text(e['date'])),
                             DataCell(Text(e['amount'].toString())),
                             DataCell(Text(e['description'])),
-                            dataTableActions(context, e.reference),
+                            dataTableActions(context, e, "/"),
                           ]);
                     }).toList()),
                 Row(

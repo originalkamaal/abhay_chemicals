@@ -29,6 +29,7 @@ class MainApp extends StatelessWidget {
                   elevation: 0,
                   centerTitle: true,
                   systemOverlayStyle: SystemUiOverlayStyle(
+                      statusBarIconBrightness: Brightness.dark,
                       statusBarColor: Colors.transparent))),
           debugShowCheckedModeBanner: false,
           initialRoute: '/',

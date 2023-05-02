@@ -103,7 +103,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                             DataCell(Text(e['batchNumber'])),
                             DataCell(Text(e['date'])),
                             DataCell(Text(e['item'])),
-                            dataTableActions(context, e.reference),
+                            dataTableActions(context, e, "/"),
                           ]);
                     }).toList()),
                 Row(

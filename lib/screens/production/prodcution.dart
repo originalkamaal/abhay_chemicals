@@ -72,7 +72,7 @@ class _AddProductionState extends State<AddProduction> {
                         cells: [
                           DataCell(Text(e['batchNumber'])),
                           DataCell(Text(e['date'])),
-                          dataTableActions(context, e.reference),
+                          dataTableActions(context, e, ""),
                         ],
                         onSelectChanged: (value) {
                           // ignore: use_build_context_synchronously

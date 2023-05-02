@@ -116,7 +116,7 @@ class _CustomersState extends State<Customers> {
                             cells: [
                               DataCell(Text(e['name'])),
                               DataCell(Text(e['village'])),
-                              dataTableActions(context, e.reference),
+                              dataTableActions(context, e, "/"),
                             ]);
                       }).toList()),
                   Row(

@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract class SalesRepository {
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSales(
+abstract class OrderReporsitory {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"});
 }
 
-class SalesController extends SalesRepository {
+class OrdersController extends OrderReporsitory {
   final FirebaseFirestore _firebaseFirestore;
 
-  SalesController({FirebaseFirestore? firebaseFirestore})
+  OrdersController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllSales(
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
     if (lastDoc == null) {
       return _firebaseFirestore.collection("order").limit(limit).snapshots();

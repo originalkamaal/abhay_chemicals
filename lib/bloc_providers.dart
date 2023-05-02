@@ -1,7 +1,9 @@
 //Blocs
+import 'package:abhay_chemicals/blocs/order_bloc/order_bloc.dart';
 import 'package:abhay_chemicals/blocs/sales_bloc/sales_bloc.dart';
 import 'package:abhay_chemicals/blocs/suppliers_bloc/suppliers_bloc.dart';
 import 'package:abhay_chemicals/blocs/user_bloc/user_bloc.dart';
+import 'package:abhay_chemicals/controllers/orders_controller.dart';
 import 'package:abhay_chemicals/controllers/purchase_controller.dart';
 import 'package:abhay_chemicals/controllers/supplier_controller.dart';
 import 'package:abhay_chemicals/controllers/users_controller.dart';
@@ -34,6 +36,9 @@ class AppBlocProviders {
         BlocProvider(
             create: (_) => SaleBloc(saleController: SalesController())
               ..add(const LoadSales())),
+        BlocProvider(
+            create: (_) => OrderBloc(orderController: OrdersController())
+              ..add(const LoadOrders())),
         BlocProvider(
             create: (_) =>
                 PurchaseBloc(purchaseController: PurchaseController())
