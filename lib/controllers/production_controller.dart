@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/widgets/edit_comp_enrich.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class ProductionRepository {
@@ -18,6 +19,22 @@ class ProductionController extends ProductionRepository {
       "paltiReport": FieldValue.arrayUnion([
         {"date": date, "palti": palti, "temperature": temp, "note": notes}
       ])
+    }).then((value) {
+      return true;
+    });
+
+    return status;
+  }
+
+  Future<bool> editCompEnrich(
+      DocumentReference e, String date, String notes, bool isComposting) async {
+    bool status = false;
+
+    status = await e.update({
+      (isComposting == true ? "composite" : "enrichment"): {
+        "date": date,
+        "note": notes
+      }
     }).then((value) {
       return true;
     });

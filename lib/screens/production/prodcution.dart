@@ -2,7 +2,9 @@ import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
 import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/purchase_controller.dart';
+import 'package:abhay_chemicals/widgets/add_new_palti.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/edit_comp_enrich.dart';
 import 'package:abhay_chemicals/widgets/purchase_table_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,30 +25,6 @@ class _AddProductionState extends State<AddProduction> {
   List<String> items = ["10", "20", "30", "50"];
   String selectedCount = "10";
   double bottomSheetHeight = 450;
-
-  late TextEditingController dateController;
-
-  DateTime selectedDate = DateTime.now();
-  String stateof = "";
-  String? palti;
-  int? temparature;
-  String? notes;
-  bool paltiErr = false;
-  bool tempError = false;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: selectedDate,
-        lastDate: DateTime(DateTime.now().year + 1));
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,28 +224,44 @@ class _AddProductionState extends State<AddProduction> {
                                                           FontWeight.w700),
                                                 ),
                                               ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    color: const Color.fromARGB(
-                                                        255, 34, 78, 12),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                margin: const EdgeInsets.only(
-                                                    left: 20,
-                                                    top: 10,
-                                                    bottom: 5,
-                                                    right: 20),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 10),
-                                                child: const Text(
-                                                  "Edit",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  return await showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                            content:
+                                                                EditCompEnrich(
+                                                          e: e,
+                                                          edit: true,
+                                                        ));
+                                                      });
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 34, 78, 12),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  margin: const EdgeInsets.only(
+                                                      left: 20,
+                                                      top: 10,
+                                                      bottom: 5,
+                                                      right: 20),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 10),
+                                                  child: const Text(
+                                                    "Edit",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -320,28 +314,44 @@ class _AddProductionState extends State<AddProduction> {
                                                           FontWeight.w700),
                                                 ),
                                               ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    color: const Color.fromARGB(
-                                                        255, 34, 78, 12),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                margin: const EdgeInsets.only(
-                                                    left: 20,
-                                                    top: 10,
-                                                    bottom: 5,
-                                                    right: 20),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 10),
-                                                child: const Text(
-                                                  "Edit",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  return await showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                            content:
+                                                                EditCompEnrich(
+                                                          e: e,
+                                                          edit: false,
+                                                        ));
+                                                      });
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 34, 78, 12),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  margin: const EdgeInsets.only(
+                                                      left: 20,
+                                                      top: 10,
+                                                      bottom: 5,
+                                                      right: 20),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 10),
+                                                  child: const Text(
+                                                    "Edit",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -396,205 +406,16 @@ class _AddProductionState extends State<AddProduction> {
                                               ),
                                               GestureDetector(
                                                 onTap: () async {
-                                                  setState(() {
-                                                    stateof = e['batchNumber'];
-                                                    palti = "";
-                                                    temparature = 30;
-                                                    paltiErr = false;
-                                                    tempError = false;
-                                                    notes = "";
-                                                  });
                                                   // ignore: use_build_context_synchronously
                                                   return await showDialog(
                                                       barrierDismissible: false,
                                                       context: context,
                                                       builder: (context) {
                                                         return AlertDialog(
-                                                          content: Form(
-                                                              child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Center(
-                                                                child: Text(
-                                                                    "Add New Palti Record"),
-                                                              ),
-                                                              Visibility(
-                                                                visible: tempError ==
-                                                                        true &&
-                                                                    stateof ==
-                                                                        e['batchNumber'],
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    "Something Went Wrong..",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            12.sp),
-                                                                  ),
-                                                                ),
-                                                              ),
-
-                                                              Row(
-                                                                children: [
-                                                                  Text("${selectedDate.toLocal()}"
-                                                                      .split(
-                                                                          ' ')[0]),
-                                                                  TextButton(
-                                                                      onPressed: () =>
-                                                                          _selectDate(
-                                                                              context),
-                                                                      child: const Text(
-                                                                          "Select Date"))
-                                                                ],
-                                                              ),
-                                                              TextField(
-                                                                controller:
-                                                                    TextEditingController(
-                                                                        text:
-                                                                            palti),
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .text,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        hintText:
-                                                                            "Palti"),
-                                                                onChanged:
-                                                                    (value) {
-                                                                  setState(() {
-                                                                    palti =
-                                                                        value;
-                                                                  });
-                                                                },
-                                                              ),
-                                                              TextField(
-                                                                controller: TextEditingController(
-                                                                    text: temparature
-                                                                        .toString()),
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        hintText:
-                                                                            "Temperature"),
-                                                                onChanged:
-                                                                    (value) {
-                                                                  setState(() {
-                                                                    temparature =
-                                                                        int.parse(
-                                                                            value);
-                                                                  });
-                                                                },
-                                                              ),
-                                                              TextField(
-                                                                controller:
-                                                                    TextEditingController(
-                                                                        text:
-                                                                            notes),
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .text,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        hintText:
-                                                                            "Notes"),
-                                                                onChanged:
-                                                                    (value) {
-                                                                  setState(() {
-                                                                    notes =
-                                                                        value;
-                                                                  });
-                                                                },
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  TextButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          palti =
-                                                                              "";
-                                                                          temparature =
-                                                                              30;
-                                                                          notes =
-                                                                              "";
-                                                                          stateof =
-                                                                              "";
-                                                                        });
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child: Text(
-                                                                          "Cancel")),
-                                                                  ElevatedButton(
-                                                                      onPressed:
-                                                                          () async {
-                                                                        if (palti !=
-                                                                            "") {
-                                                                          print(
-                                                                              palti!.length);
-                                                                          bool status = await ProductionController().addNewPalti(
-                                                                              e.reference,
-                                                                              selectedDate.toString(),
-                                                                              palti!,
-                                                                              temparature!,
-                                                                              notes!);
-                                                                          if (status =
-                                                                              true) {
-                                                                            Navigator.pop(context);
-                                                                          }
-                                                                        } else {
-                                                                          setState(
-                                                                              () {
-                                                                            tempError =
-                                                                                true;
-                                                                            stateof =
-                                                                                e['batchNumber'];
-                                                                          });
-                                                                        }
-                                                                      },
-                                                                      child: Text(
-                                                                          "Submit"))
-                                                                ],
-                                                              )
-
-                                                              // DatePickerDialog(
-                                                              //   restorationId:
-                                                              //       'date_picker_dialog',
-                                                              //   initialEntryMode:
-                                                              //       DatePickerEntryMode
-                                                              //           .calendarOnly,
-                                                              //   initialDate:
-                                                              //       DateTime
-                                                              //           .now(),
-                                                              //   firstDate:
-                                                              //       DateTime
-                                                              //           .now(),
-                                                              //   lastDate: DateTime(
-                                                              //       DateTime.now()
-                                                              //               .year +
-                                                              //           1),
-                                                              // )
-                                                            ],
-                                                          )),
-                                                        );
+                                                            content:
+                                                                AddNewPalti(
+                                                          e: e,
+                                                        ));
                                                       });
                                                 },
                                                 child: Container(

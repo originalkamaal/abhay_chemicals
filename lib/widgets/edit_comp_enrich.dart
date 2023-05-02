@@ -3,22 +3,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddNewPalti extends StatefulWidget {
+class EditCompEnrich extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> e;
+  final bool edit;
 
-  const AddNewPalti({super.key, required this.e});
+  const EditCompEnrich({super.key, required this.e, required this.edit});
 
   @override
-  State<AddNewPalti> createState() => _AddNewPaltiState();
+  State<EditCompEnrich> createState() => _EditCompEnrichState();
 }
 
-class _AddNewPaltiState extends State<AddNewPalti> {
+class _EditCompEnrichState extends State<EditCompEnrich> {
   DateTime selectedDate = DateTime.now();
-  String temp = "";
   String notes = "";
-  String palti = "";
-  bool tempError = false;
-  bool paltiError = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -43,16 +40,7 @@ class _AddNewPaltiState extends State<AddNewPalti> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
-          child: Text("Add New Palti Record"),
-        ),
-        Visibility(
-          visible: tempError == true,
-          child: Center(
-            child: Text(
-              "Something Went Wrong..",
-              style: TextStyle(color: Colors.red, fontSize: 12.sp),
-            ),
-          ),
+          child: Text("Edit ${widget.edit ? "Composting" : "Enrichment"}"),
         ),
         Row(
           children: [
@@ -61,24 +49,6 @@ class _AddNewPaltiState extends State<AddNewPalti> {
                 onPressed: () => _selectDate(context),
                 child: const Text("Select Date"))
           ],
-        ),
-        TextField(
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(hintText: "Palti"),
-          onChanged: (value) {
-            setState(() {
-              palti = value;
-            });
-          },
-        ),
-        TextField(
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(hintText: "Temperature"),
-          onChanged: (value) {
-            setState(() {
-              temp = value;
-            });
-          },
         ),
         TextField(
           keyboardType: TextInputType.text,
@@ -98,8 +68,6 @@ class _AddNewPaltiState extends State<AddNewPalti> {
             TextButton(
                 onPressed: () {
                   setState(() {
-                    palti = "";
-                    temp = "";
                     notes = "";
                   });
                   Navigator.pop(context);
@@ -107,20 +75,13 @@ class _AddNewPaltiState extends State<AddNewPalti> {
                 child: Text("Cancel")),
             ElevatedButton(
                 onPressed: () async {
-                  if (palti != "" && temp != "") {
-                    bool status = await ProductionController().addNewPalti(
-                        widget.e.reference,
-                        selectedDate.toString().split(' ')[0],
-                        palti,
-                        int.parse(temp),
-                        notes);
-                    if (status = true) {
-                      Navigator.pop(context);
-                    }
-                  } else {
-                    setState(() {
-                      tempError = true;
-                    });
+                  bool status = await ProductionController().editCompEnrich(
+                      widget.e.reference,
+                      selectedDate.toString().split(' ')[0],
+                      notes,
+                      widget.edit);
+                  if (status = true) {
+                    Navigator.pop(context);
                   }
                 },
                 child: Text("Submit"))
