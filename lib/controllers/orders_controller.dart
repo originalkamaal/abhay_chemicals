@@ -15,22 +15,32 @@ class OrdersController extends OrderReporsitory {
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
     if (lastDoc == null) {
-      return _firebaseFirestore.collection("order").limit(limit).snapshots();
+      return _firebaseFirestore
+          .collection("order")
+          .orderBy("date", descending: true)
+          .limit(limit)
+          .snapshots();
     } else {
       if (action == "forward") {
         return _firebaseFirestore
             .collection("order")
             .startAfterDocument(lastDoc)
+            .orderBy("date", descending: true)
             .limit(limit)
             .snapshots();
       } else if (action == "back") {
         return _firebaseFirestore
             .collection("order")
             .endBeforeDocument(lastDoc)
+            .orderBy("date", descending: true)
             .limitToLast(limit)
             .snapshots();
       } else {
-        return _firebaseFirestore.collection("order").limit(limit).snapshots();
+        return _firebaseFirestore
+            .collection("order")
+            .orderBy("date", descending: true)
+            .limit(limit)
+            .snapshots();
       }
     }
   }

@@ -1,32 +1,32 @@
-part of 'sales_bloc.dart';
+part of 'ordersales_bloc.dart';
 
-abstract class SalesEvent extends Equatable {
-  const SalesEvent();
+abstract class OrderSalesEvent extends Equatable {
+  const OrderSalesEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadSales extends SalesEvent {
+class LoadOrderSales extends OrderSalesEvent {
   final DocumentSnapshot? lastDoc;
   final int limit;
   final String direction;
   final int pageNumber;
 
-  const LoadSales(
+  const LoadOrderSales(
       {this.lastDoc,
       this.limit = 10,
       this.direction = "init",
       this.pageNumber = 1});
 }
 
-class UpdateSales extends SalesEvent {
-  final QuerySnapshot<Map<String, dynamic>>? sales;
+class UpdateOrderSales extends OrderSalesEvent {
+  final QuerySnapshot<Map<String, dynamic>>? orderSales;
   final int? pageNumber;
   final int? limit;
 
-  const UpdateSales({
-    this.sales,
+  const UpdateOrderSales({
+    this.orderSales,
     this.pageNumber,
     this.limit,
   });

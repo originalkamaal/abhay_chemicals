@@ -3,7 +3,7 @@ import 'package:abhay_chemicals/screens/expense/expense.dart';
 import 'package:abhay_chemicals/screens/production/prodcution.dart';
 import 'package:abhay_chemicals/screens/purchase/purchase.dart';
 import 'package:abhay_chemicals/screens/home/home.dart';
-import 'package:abhay_chemicals/screens/sales/sales.dart';
+import 'package:abhay_chemicals/screens/sales/sales_order.dart';
 import 'package:abhay_chemicals/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: const <Widget>[
         Home(),
         AddProduction(),
-        AddSale(),
+        OrdersAndSales(),
         AddPurchase(),
         AddExpense()
       ],
