@@ -133,6 +133,7 @@ Widget buildDateInput(
 
 Widget buildTextInput(
     {String placeHolder = "",
+    String initialValue = "",
     String inputType = "",
     String iconName = "",
     void Function(String value)? onChange,
@@ -159,11 +160,14 @@ Widget buildTextInput(
           Expanded(
             child: TextFormField(
               controller: controller,
+              initialValue: initialValue,
               onChanged: onChange,
               obscureText: inputType == "password" ? true : false,
               keyboardType: inputType == "mobile"
                   ? TextInputType.phone
-                  : TextInputType.name,
+                  : inputType == "number"
+                      ? TextInputType.number
+                      : TextInputType.name,
               style: TextStyle(
                   color: AppColors.primaryText,
                   fontWeight: FontWeight.normal,

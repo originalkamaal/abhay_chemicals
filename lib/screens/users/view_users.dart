@@ -6,36 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Users extends StatefulWidget {
-  const Users({super.key});
+class Admin extends StatefulWidget {
+  const Admin({super.key});
 
   @override
-  State<Users> createState() => _UsersState();
+  State<Admin> createState() => _AdminState();
 }
 
-class _UsersState extends State<Users> {
+class _AdminState extends State<Admin> {
   List<String> items = ["10", "20", "30", "50"];
   String selectedCount = "10";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          "assets/images/logo.png",
-          height: 60,
-          fit: BoxFit.fitHeight,
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        actionsIconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search_outlined)),
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
-        ],
-      ),
       body: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {
           UsersBloc bloc = context.read<UsersBloc>();
@@ -51,73 +34,49 @@ class _UsersState extends State<Users> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     child: const AddNewWithTitle(
-                        title: "Users", routeName: "/addProductions"),
+                        title: "Users", routeName: "/addAdmin"),
                   ),
-                  DataTable(
-                      showCheckboxColumn: false,
-                      columnSpacing: 1,
-                      headingRowColor: MaterialStateProperty.resolveWith<Color>(
-                          (states) => const Color.fromARGB(255, 237, 246, 237)),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          "Name",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Email",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Actions",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ))
-                      ],
-                      rows: state.users!.docs.map((e) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(e['name'])),
-                            DataCell(Text(e['email'])),
-                            dataTableActions(context, e, "/"),
-                          ],
-                          onSelectChanged: (value) {
-                            showModalBottomSheet(
-                                isDismissible: false,
-                                isScrollControlled: false,
-                                context: context,
-                                builder: (context) => Container(
-                                      height: 350.h,
-                                      color: const Color.fromARGB(
-                                          255, 237, 246, 237),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.close,
-                                                color: Colors.black,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                context
-                                                    .read<CommonBloc>()
-                                                    .add(OpenBottomSheet(true));
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                enableDrag: false);
-                            context
-                                .read<CommonBloc>()
-                                .add(OpenBottomSheet(true));
-                          },
-                        );
-                      }).toList()),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                        showCheckboxColumn: false,
+                        columnSpacing: 1,
+                        headingRowColor:
+                            MaterialStateProperty.resolveWith<Color>((states) =>
+                                const Color.fromARGB(255, 237, 246, 237)),
+                        columns: const [
+                          DataColumn(
+                              label: Text(
+                            "Name",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Email",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Mobile",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Actions",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
+                        ],
+                        rows: state.users!.docs.map((e) {
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(e['name'])),
+                              DataCell(Text(e['email'])),
+                              DataCell(Text(e['phoneNumber'].toString())),
+                              dataTableActions(context, e, "/editAdmin"),
+                            ],
+                          );
+                        }).toList()),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

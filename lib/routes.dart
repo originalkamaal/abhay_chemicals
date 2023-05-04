@@ -2,8 +2,15 @@ import 'package:abhay_chemicals/screens/customers/customers_screen.dart';
 import 'package:abhay_chemicals/screens/home_screen.dart';
 import 'package:abhay_chemicals/screens/login_screen.dart';
 import 'package:abhay_chemicals/screens/production/add_production.dart';
+import 'package:abhay_chemicals/screens/sales/add_order.dart';
+import 'package:abhay_chemicals/screens/sales/add_sales.dart';
+import 'package:abhay_chemicals/screens/suppliers/add_suppliers.dart';
 import 'package:abhay_chemicals/screens/suppliers/suppliers_screen.dart';
-import 'package:abhay_chemicals/screens/users/users_screen.dart';
+import 'package:abhay_chemicals/screens/users/add_admin.dart';
+import 'package:abhay_chemicals/screens/users/add_careof.dart';
+import 'package:abhay_chemicals/screens/users/edit_admin.dart';
+import 'package:abhay_chemicals/screens/users/edit_careof.dart';
+import 'package:abhay_chemicals/screens/users/users_careof.dart';
 import 'package:abhay_chemicals/splash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +32,22 @@ class MyRoutes {
         return _buildRoute(routeSettings, const Users());
       case '/addProductions':
         return _buildRoute(routeSettings, const EditProduction());
+      case '/addOrders':
+        return _buildRoute(routeSettings, const AddOrder());
+      case '/addSales':
+        return _buildRoute(routeSettings, const AddSales());
+      case '/addSupplier':
+        return _buildRoute(routeSettings, const AddSupplier());
+      case '/addAdmin':
+        return _buildRoute(routeSettings, const AddAdmin());
+      case '/addCareOf':
+        return _buildRoute(routeSettings, const AddCareOf());
+      case '/editCareOf':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, EditCareOf(document: e));
+      case '/editAdmin':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, EditAdmin(document: e));
       default:
         return _errorRoute();
     }

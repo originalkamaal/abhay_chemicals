@@ -11,6 +11,34 @@ class OrderSalesController extends SalesRepository {
   OrderSalesController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future addNewSales(DocumentSnapshot e, int challanNo, int quantity) async {
+    bool status = false;
+
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.doc((e['careOf'] as DocumentReference).path);
+    status = await documentReference.get().then((careOf) async {
+      if (careOf.exists) {
+        return await _firebaseFirestore.collection("sales").add({
+          "careOf": careOf['name'],
+          "challanNumber": challanNo,
+          "customer": e['customer'],
+          "date": e['date'],
+          "item": e['item'],
+          "orderId": e['orderId'],
+          "phoneNumber": careOf['phoneNumber'],
+          "quantity": quantity,
+          "village": e['village'],
+        }).then((value) {
+          return true;
+        });
+      } else {
+        return false;
+      }
+    });
+
+    return status;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrderSales(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {

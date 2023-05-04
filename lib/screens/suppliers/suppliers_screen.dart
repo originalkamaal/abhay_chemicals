@@ -51,7 +51,7 @@ class _SuppliersState extends State<Suppliers> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     child: const AddNewWithTitle(
-                        title: "Suppliers", routeName: "/addProductions"),
+                        title: "Suppliers", routeName: "/addSupplier"),
                   ),
                   DataTable(
                       showCheckboxColumn: false,

@@ -11,6 +11,15 @@ class OrdersController extends OrderReporsitory {
   OrdersController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getSalesByOrderId(
+      int orderId) async {
+    QuerySnapshot<Map<String, dynamic>> doc = await _firebaseFirestore
+        .collection("sales")
+        .where("orderId", isEqualTo: orderId)
+        .get();
+    return doc;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {

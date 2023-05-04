@@ -39,3 +39,9 @@ Initial layout of production page, will add some more styling after completeing 
 
 Bottom Navigation for quick navigation to mostly used screens
 Sidebar navigation for overall app routing..
+
+TODO:
+
+Production Feature Done
+Admin/Users Feature Done
+Careof Feature Done
