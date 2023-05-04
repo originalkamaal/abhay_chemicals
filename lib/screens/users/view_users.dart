@@ -1,7 +1,9 @@
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/user_bloc/user_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:abhay_chemicals/widgets/confirm_widget.dart';
 import 'package:abhay_chemicals/widgets/list_actions_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,6 +64,16 @@ class _AdminState extends State<Admin> {
                           )),
                           DataColumn(
                               label: Text(
+                            "Role",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Reset Password",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
                             "Actions",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ))
@@ -71,7 +83,27 @@ class _AdminState extends State<Admin> {
                             cells: [
                               DataCell(Text(e['name'])),
                               DataCell(Text(e['email'])),
+                              DataCell(Text(e['role'])),
                               DataCell(Text(e['phoneNumber'].toString())),
+                              DataCell(Container(
+                                child: TextButton(
+                                  child: Text("Send Link"),
+                                  onPressed: () {
+                                    confirmAction(
+                                      context: context,
+                                      title:
+                                          "Send Reset Password Link to the user",
+                                      message: "Are you sure?",
+                                      okBtnTitle: "Confirm",
+                                      onPressed: () async {
+                                        await FirebaseAuth.instance
+                                            .sendPasswordResetEmail(
+                                                email: e['email']);
+                                      },
+                                    );
+                                  },
+                                ),
+                              )),
                               dataTableActions(context, e, "/editAdmin"),
                             ],
                           );

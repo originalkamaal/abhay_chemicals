@@ -144,37 +144,6 @@ class _EditAdminState extends State<EditAdmin> {
                   });
                 },
               ),
-              Visibility(
-                  visible: selectedItem == "admin" || selectedItem == "Admin",
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      reusableText("Password", 20.w),
-                      buildTextInput(
-                        placeHolder: "Enter Password",
-                        inputType: "password",
-                        iconName: "lock",
-                        onChange: ((value) {
-                          setState(() {
-                            pass = value;
-                          });
-                        }),
-                      ),
-                      ErrorText(nameErr: passErr),
-                      reusableText("Confirm Password", 20.w),
-                      buildTextInput(
-                        placeHolder: "Confirm Password",
-                        inputType: "text",
-                        iconName: "lock",
-                        onChange: ((value) {
-                          setState(() {
-                            cpass = value;
-                          });
-                        }),
-                      ),
-                      ErrorText(nameErr: cpassErr),
-                    ],
-                  )),
               ErrorText(nameErr: cpassErr),
               GestureDetector(
                 onTap: () async {

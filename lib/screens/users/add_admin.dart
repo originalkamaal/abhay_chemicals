@@ -129,37 +129,30 @@ class _AddAdminState extends State<AddAdmin> {
                   });
                 },
               ),
-              Visibility(
-                  visible: selectedItem == "admin" || selectedItem == "Admin",
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      reusableText("Password", 20.w),
-                      buildTextInput(
-                        placeHolder: "Enter Password",
-                        inputType: "password",
-                        iconName: "lock",
-                        onChange: ((value) {
-                          setState(() {
-                            pass = value;
-                          });
-                        }),
-                      ),
-                      ErrorText(nameErr: passErr),
-                      reusableText("Confirm Password", 20.w),
-                      buildTextInput(
-                        placeHolder: "Confirm Password",
-                        inputType: "text",
-                        iconName: "lock",
-                        onChange: ((value) {
-                          setState(() {
-                            cpass = value;
-                          });
-                        }),
-                      ),
-                      ErrorText(nameErr: cpassErr),
-                    ],
-                  )),
+              reusableText("Password", 20.w),
+              buildTextInput(
+                placeHolder: "Enter Password",
+                inputType: "password",
+                iconName: "lock",
+                onChange: ((value) {
+                  setState(() {
+                    pass = value;
+                  });
+                }),
+              ),
+              ErrorText(nameErr: passErr),
+              reusableText("Confirm Password", 20.w),
+              buildTextInput(
+                placeHolder: "Confirm Password",
+                inputType: "text",
+                iconName: "lock",
+                onChange: ((value) {
+                  setState(() {
+                    cpass = value;
+                  });
+                }),
+              ),
+              ErrorText(nameErr: cpassErr),
               GestureDetector(
                 onTap: () async {
                   if (validation()) {
@@ -171,27 +164,19 @@ class _AddAdminState extends State<AddAdmin> {
                       cpassErr = "";
                     });
                     bool status = false;
-                    if (selectedItem == "User") {
-                      status = await UsersController().addAdmin(
-                          name: name,
-                          mobile: int.parse(mobile),
-                          email: email,
-                          role: selectedItem.toLowerCase());
-                    } else if (selectedItem == "Admin") {
-                      status = await UsersController().addAdmin(
-                          name: name,
-                          mobile: int.parse(mobile),
-                          email: email,
-                          role: selectedItem.toLowerCase(),
-                          password: pass);
+                    status = await UsersController().addAdmin(
+                        name: name,
+                        mobile: int.parse(mobile),
+                        email: email,
+                        role: selectedItem.toLowerCase(),
+                        password: pass);
 
-                      if (status) {
-                        Navigator.pop(context);
-                      } else {
-                        setState(() {
-                          mainErr = "Something went wrong.. try later";
-                        });
-                      }
+                    if (status) {
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        mainErr = "Something went wrong.. try later";
+                      });
                     }
                   } else {
                     print("not ok");

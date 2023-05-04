@@ -18,23 +18,13 @@ class UsersController extends UsersRepository {
       required int mobile,
       required String email,
       required String role,
-      String? password}) async {
+      required String password}) async {
     bool status = false;
 
-    if (role == "admin") {
-      status = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: email, password: password ?? "admin@123")
-          .then((value) {
-        return true;
-      }).catchError((e) {
-        return false;
-      });
-    }
-
-    if (status == true || role == "user") {
-      status == false;
-      status = await _firebaseFirestore.collection("employee").add({
+    status = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) async {
+      return await _firebaseFirestore.collection("employee").add({
         "email": email,
         "name": name,
         "phoneNumber": mobile,
@@ -44,7 +34,9 @@ class UsersController extends UsersRepository {
       }).catchError((e) {
         return false;
       });
-    }
+    }).catchError((e) {
+      return false;
+    });
 
     return status;
   }

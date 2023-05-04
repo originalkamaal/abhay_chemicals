@@ -42,6 +42,63 @@ Sidebar navigation for overall app routing..
 
 TODO:
 
-Production Feature Done
-Admin/Users Feature Done
-Careof Feature Done
+#### Production
+
+View Productions - Done
+View Production Detail - Done
+Add Production - Done
+Edit Production - Done
+
+#### Sales
+
+View Sales - Done
+View Sale Details - Pending
+Add Sale of an Order - Done
+Add Direct Sale - Pending
+Edit Sale - Pending
+
+#### Order
+
+View Order Details - Done
+View Orders - Done
+Edit Order - Pending
+Add Order - Pending
+
+#### Purchase
+
+View Purchase - Done
+View Purchase Detail - Done
+Add Purchase - Pending
+Edit Purchase - Pending
+
+#### Expense
+
+View Purchase - Done
+View Expense Detail - Pending
+Add Expense - Pending
+Edit Expense - Pending
+
+#### Customer
+
+View Customer - Done
+View Customer Detail - Pending
+Add Customer - Pending
+Edit Customer - Pending
+
+#### Supplier
+
+View Supplier - Done
+View Supplier Detail - Pending
+Add Supplier - Pending
+Edit Supplier - Pending
+
+#### User/Admin
+
+Add User/Admin - Done
+Edit User/Admin - Done
+Reset Password - Done
+
+#### Careof
+
+Add Careof - Done
+Edit Careof - Done
