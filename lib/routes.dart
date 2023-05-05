@@ -1,6 +1,8 @@
 import 'package:abhay_chemicals/screens/customers/add_customer.dart';
 import 'package:abhay_chemicals/screens/customers/customers_screen.dart';
 import 'package:abhay_chemicals/screens/customers/edit_customer.dart';
+import 'package:abhay_chemicals/screens/expense/add_expenses.dart';
+import 'package:abhay_chemicals/screens/expense/edit_expenses.dart';
 import 'package:abhay_chemicals/screens/home_screen.dart';
 import 'package:abhay_chemicals/screens/login_screen.dart';
 import 'package:abhay_chemicals/screens/production/add_production.dart';
@@ -57,8 +59,13 @@ class MyRoutes {
       case '/editCustomer':
         DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
         return _buildRoute(routeSettings, EditCustomer(documentSnapshot: e));
+      case '/editExpense':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, EditExpense(document: e));
       case '/addCustomer':
-        return _buildRoute(routeSettings, AddCustomer());
+        return _buildRoute(routeSettings, const AddCustomer());
+      case '/addExpense':
+        return _buildRoute(routeSettings, const AddExpense());
       default:
         return _errorRoute();
     }

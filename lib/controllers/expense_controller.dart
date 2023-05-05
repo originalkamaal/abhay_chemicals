@@ -11,6 +11,41 @@ class ExpenseController extends ExpenseRepository {
   ExpenseController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future<bool> addExpense(
+      {required String amount,
+      required String date,
+      String? description}) async {
+    bool status = await _firebaseFirestore.collection("expenses").add({
+      "amount": int.parse(amount),
+      "date": date,
+      "description": description ?? ""
+    }).then((value) {
+      return true;
+    }).catchError((e) {
+      return false;
+    });
+
+    return status;
+  }
+
+  Future<bool> editExpense(
+      {required DocumentReference reference,
+      required String amount,
+      required String date,
+      String? description}) async {
+    bool status = await reference.update({
+      "amount": int.parse(amount),
+      "date": date,
+      "description": description ?? ""
+    }).then((value) {
+      return true;
+    }).catchError((e) {
+      return false;
+    });
+
+    return status;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllExpenses(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {

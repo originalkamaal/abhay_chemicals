@@ -45,6 +45,7 @@ TODO:
 #### Production
 
 View Productions - Done
+Delet Production - Done
 View Production Detail - Done
 Add Production - Done
 Edit Production - Done
@@ -52,6 +53,7 @@ Edit Production - Done
 #### Sales
 
 View Sales - Done
+Delet Sale - Done
 View Sale Details - Pending
 Add Sale of an Order - Done
 Add Direct Sale - Pending
@@ -60,6 +62,7 @@ Edit Sale - Pending
 #### Order
 
 View Order Details - Done
+Delet Order - Done
 View Orders - Done
 Edit Order - Pending
 Add Order - Pending
@@ -67,6 +70,7 @@ Add Order - Pending
 #### Purchase
 
 View Purchase - Done
+Delet Purchase - Done
 View Purchase Detail - Done
 Add Purchase - Pending
 Edit Purchase - Pending
@@ -74,13 +78,15 @@ Edit Purchase - Pending
 #### Expense
 
 View Purchase - Done
-View Expense Detail - Pending
-Add Expense - Pending
-Edit Expense - Pending
+Delet Expense - Done
+View Expense Detail - Done
+Add Expense - Done
+Edit Expense - Done
 
 #### Customer
 
 View Customer - Done
+Delet Customer - Done
 View Customer Detail - Done
 Add Customer - Done
 Edit Customer - Done
@@ -88,6 +94,7 @@ Edit Customer - Done
 #### Supplier
 
 View Supplier - Done
+Delet Supplier - Done
 View Supplier Detail - Done
 Add Supplier - Done
 Edit Supplier - Done
@@ -95,10 +102,12 @@ Edit Supplier - Done
 #### User/Admin
 
 Add User/Admin - Done
+Delet User/Admin - Done
 Edit User/Admin - Done
 Reset Password - Done
 
 #### Careof
 
 Add Careof - Done
+Delet Careof - Done
 Edit Careof - Done

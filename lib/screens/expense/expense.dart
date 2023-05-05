@@ -7,14 +7,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/add_new_with_title.dart';
 import '../../widgets/list_actions_widget.dart';
 
-class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+class Expense extends StatefulWidget {
+  const Expense({super.key});
 
   @override
-  State<AddExpense> createState() => _AddExpenseState();
+  State<Expense> createState() => _ExpenseState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _ExpenseState extends State<Expense> {
   List<String> items = ["10", "20", "30", "50"];
   String selectedCount = "10";
   @override
@@ -32,7 +32,7 @@ class _AddExpenseState extends State<AddExpense> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: const AddNewWithTitle(
-                      title: "Purchases", routeName: "/addPurchases"),
+                      title: "Expenses", routeName: "/addExpense"),
                 ),
                 DataTable(
                     showCheckboxColumn: false,
@@ -62,47 +62,17 @@ class _AddExpenseState extends State<AddExpense> {
                       ))
                     ],
                     rows: state.expense!.docs.map((e) {
-                      return DataRow(
-                          onSelectChanged: (value) {
-                            showModalBottomSheet(
-                                isDismissible: false,
-                                isScrollControlled: false,
-                                context: context,
-                                builder: (context) => Container(
-                                      height: 350.h,
-                                      color: const Color.fromARGB(
-                                          255, 237, 246, 237),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.close,
-                                                color: Colors.black,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                context
-                                                    .read<CommonBloc>()
-                                                    .add(OpenBottomSheet(true));
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                enableDrag: false);
-                            context
-                                .read<CommonBloc>()
-                                .add(OpenBottomSheet(true));
-                          },
-                          cells: [
-                            DataCell(Text(e['date'])),
-                            DataCell(Text(e['amount'].toString())),
-                            DataCell(Text(e['description'])),
-                            dataTableActions(context, e, "/"),
-                          ]);
+                      return DataRow(cells: [
+                        DataCell(Text(e['date'])),
+                        DataCell(Center(
+                          child: Text(
+                            e['amount'].toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                        DataCell(Text(e['description'])),
+                        dataTableActions(context, e, "/editExpense"),
+                      ]);
                     }).toList()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

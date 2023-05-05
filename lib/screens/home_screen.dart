@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         AddProduction(),
         OrdersAndSales(),
         AddPurchase(),
-        AddExpense()
+        Expense()
       ],
     );
   }
