@@ -1,6 +1,8 @@
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,7 +54,7 @@ class _CustomersState extends State<Customers> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     child: const AddNewWithTitle(
-                        title: "Customers", routeName: "/addProductions"),
+                        title: "Customers", routeName: "/addCustomer"),
                   ),
                   DataTable(
                       showCheckboxColumn: false,
@@ -84,28 +86,123 @@ class _CustomersState extends State<Customers> {
                                   isScrollControlled: false,
                                   context: context,
                                   builder: (context) => Container(
-                                        height: 350.h,
                                         color: const Color.fromARGB(
                                             255, 237, 246, 237),
-                                        child: Column(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: IconButton(
-                                                icon: const Icon(
-                                                  Icons.close,
-                                                  color: Colors.black,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.black,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
                                                 ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  context
-                                                      .read<CommonBloc>()
-                                                      .add(OpenBottomSheet(
-                                                          true));
-                                                },
                                               ),
-                                            ),
-                                          ],
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10,
+                                                    right: 10,
+                                                    bottom: 10),
+                                                child: Card(
+                                                  child: Container(
+                                                    width: double.maxFinite,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                              "Customer Name :"),
+                                                          CustomText(
+                                                              text: e['name']),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Customer Mobile :"),
+                                                          CustomText(
+                                                              text: e["phoneNumber"]
+                                                                  .toString()),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Care of :"),
+                                                          e.get("careOf") == ""
+                                                              ? FutureBuilder(
+                                                                  future: FirebaseFirestore
+                                                                      .instance
+                                                                      .doc((e['careOf']
+                                                                              as DocumentReference)
+                                                                          .path)
+                                                                      .get(),
+                                                                  builder:
+                                                                      (context,
+                                                                          snap) {
+                                                                    return CustomText(
+                                                                        text: snap
+                                                                            .data!["name"]
+                                                                            .toString());
+                                                                  })
+                                                              : Text(""),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Billing Addresss :"),
+                                                          CustomText(
+                                                              text: e[
+                                                                  "billingAddress"]),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Billing Pincode :"),
+                                                          CustomText(
+                                                              text: e["billingPincode"]
+                                                                  .toString()),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Shipping Address :"),
+                                                          CustomText(
+                                                              text: e[
+                                                                  "shippingAddress"]),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Shipping Pincode :"),
+                                                          CustomText(
+                                                              text: e["shippingPincode"]
+                                                                  .toString()),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          const Text(
+                                                              "Village :"),
+                                                          CustomText(
+                                                              text:
+                                                                  e["village"]),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                        ]),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                   enableDrag: false);
@@ -116,7 +213,7 @@ class _CustomersState extends State<Customers> {
                             cells: [
                               DataCell(Text(e['name'])),
                               DataCell(Text(e['village'])),
-                              dataTableActions(context, e, "/"),
+                              dataTableActions(context, e, "/editCustomer"),
                             ]);
                       }).toList()),
                   Row(
@@ -194,6 +291,19 @@ class _CustomersState extends State<Customers> {
           }
         },
       ),
+    );
+  }
+}
+
+class CustomText extends StatelessWidget {
+  final String text;
+  const CustomText({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
     );
   }
 }

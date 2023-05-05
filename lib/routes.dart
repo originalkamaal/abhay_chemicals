@@ -1,10 +1,13 @@
+import 'package:abhay_chemicals/screens/customers/add_customer.dart';
 import 'package:abhay_chemicals/screens/customers/customers_screen.dart';
+import 'package:abhay_chemicals/screens/customers/edit_customer.dart';
 import 'package:abhay_chemicals/screens/home_screen.dart';
 import 'package:abhay_chemicals/screens/login_screen.dart';
 import 'package:abhay_chemicals/screens/production/add_production.dart';
 import 'package:abhay_chemicals/screens/sales/add_order.dart';
 import 'package:abhay_chemicals/screens/sales/add_sales.dart';
 import 'package:abhay_chemicals/screens/suppliers/add_suppliers.dart';
+import 'package:abhay_chemicals/screens/suppliers/edit_supplier.dart';
 import 'package:abhay_chemicals/screens/suppliers/suppliers_screen.dart';
 import 'package:abhay_chemicals/screens/users/add_admin.dart';
 import 'package:abhay_chemicals/screens/users/add_careof.dart';
@@ -48,6 +51,14 @@ class MyRoutes {
       case '/editAdmin':
         DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
         return _buildRoute(routeSettings, EditAdmin(document: e));
+      case '/editSupplier':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, EditSupplier(document: e));
+      case '/editCustomer':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, EditCustomer(documentSnapshot: e));
+      case '/addCustomer':
+        return _buildRoute(routeSettings, AddCustomer());
       default:
         return _errorRoute();
     }

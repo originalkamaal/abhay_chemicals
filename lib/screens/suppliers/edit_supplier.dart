@@ -1,21 +1,25 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
+import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/supplier_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
 import 'package:abhay_chemicals/widgets/error_text.dart';
 import 'package:abhay_chemicals/widgets/input_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddSupplier extends StatefulWidget {
-  const AddSupplier({super.key});
+class EditSupplier extends StatefulWidget {
+  final DocumentSnapshot document;
+
+  const EditSupplier({super.key, required this.document});
 
   @override
-  State<AddSupplier> createState() => _AddSupplierState();
+  State<EditSupplier> createState() => _EditSupplierState();
 }
 
-class _AddSupplierState extends State<AddSupplier> {
+class _EditSupplierState extends State<EditSupplier> {
   String name = "";
   String mobile = "";
   String email = "";
@@ -23,6 +27,15 @@ class _AddSupplierState extends State<AddSupplier> {
   String nameErr = "";
   String mobileErr = "";
   String emailErr = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name = widget.document['name'];
+    mobile = widget.document['phoneNumber'].toString();
+    email = widget.document['email'];
+  }
 
   bool validation() {
     bool result = true;
@@ -62,6 +75,7 @@ class _AddSupplierState extends State<AddSupplier> {
               buildTextInput(
                 placeHolder: "Enter Name",
                 inputType: "text",
+                initialValue: name,
                 iconName: "person",
                 onChange: ((value) {
                   setState(() {
@@ -74,6 +88,7 @@ class _AddSupplierState extends State<AddSupplier> {
               buildTextInput(
                 placeHolder: "Enter Contact Number",
                 inputType: "mobile",
+                initialValue: mobile,
                 iconName: "",
                 onChange: ((value) {
                   setState(() {
@@ -86,6 +101,7 @@ class _AddSupplierState extends State<AddSupplier> {
               buildTextInput(
                 placeHolder: "Enter Email",
                 inputType: "text",
+                initialValue: email,
                 iconName: "message-circle",
                 onChange: ((value) {
                   setState(() {
@@ -102,8 +118,11 @@ class _AddSupplierState extends State<AddSupplier> {
                       mobileErr = "";
                       emailErr = "";
                     });
-                    bool status = await SupplierController().addNewSupplier(
-                        name: name, mobile: mobile, email: email);
+                    bool status = await SupplierController().editSupllier(
+                        reference: widget.document.reference,
+                        name: name,
+                        mobile: mobile,
+                        email: email);
                     if (status) {
                       Navigator.pop(context);
                     }

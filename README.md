@@ -81,16 +81,16 @@ Edit Expense - Pending
 #### Customer
 
 View Customer - Done
-View Customer Detail - Pending
-Add Customer - Pending
-Edit Customer - Pending
+View Customer Detail - Done
+Add Customer - Done
+Edit Customer - Done
 
 #### Supplier
 
 View Supplier - Done
-View Supplier Detail - Pending
-Add Supplier - Pending
-Edit Supplier - Pending
+View Supplier Detail - Done
+Add Supplier - Done
+Edit Supplier - Done
 
 #### User/Admin
 

@@ -53,71 +53,82 @@ class _SuppliersState extends State<Suppliers> {
                     child: const AddNewWithTitle(
                         title: "Suppliers", routeName: "/addSupplier"),
                   ),
-                  DataTable(
-                      showCheckboxColumn: false,
-                      columnSpacing: 1,
-                      headingRowColor: MaterialStateProperty.resolveWith<Color>(
-                          (states) => const Color.fromARGB(255, 237, 246, 237)),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          "Name",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Email",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          "Actions",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ))
-                      ],
-                      rows: state.suppliers!.docs.map((e) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(e['name'])),
-                            DataCell(Text(e['email'])),
-                            dataTableActions(context, e, "/"),
-                          ],
-                          onSelectChanged: (value) {
-                            showModalBottomSheet(
-                                isDismissible: false,
-                                isScrollControlled: false,
-                                context: context,
-                                builder: (context) => Container(
-                                      height: 350.h,
-                                      color: const Color.fromARGB(
-                                          255, 237, 246, 237),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.close,
-                                                color: Colors.black,
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                        showCheckboxColumn: false,
+                        columnSpacing: 1,
+                        headingRowColor:
+                            MaterialStateProperty.resolveWith<Color>((states) =>
+                                const Color.fromARGB(255, 237, 246, 237)),
+                        columns: const [
+                          DataColumn(
+                              label: Text(
+                            "Name",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Email",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Mobile",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "Actions",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
+                        ],
+                        rows: state.suppliers!.docs.map((e) {
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(e['name'])),
+                              DataCell(Text(e['email'])),
+                              DataCell(Text(e['phoneNumber'].toString())),
+                              dataTableActions(context, e, "/editSupplier"),
+                            ],
+                            onSelectChanged: (value) {
+                              showModalBottomSheet(
+                                  isDismissible: false,
+                                  isScrollControlled: false,
+                                  context: context,
+                                  builder: (context) => Container(
+                                        height: 350.h,
+                                        color: const Color.fromARGB(
+                                            255, 237, 246, 237),
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.black,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  context
+                                                      .read<CommonBloc>()
+                                                      .add(OpenBottomSheet(
+                                                          true));
+                                                },
                                               ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                context
-                                                    .read<CommonBloc>()
-                                                    .add(OpenBottomSheet(true));
-                                              },
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                enableDrag: false);
-                            context
-                                .read<CommonBloc>()
-                                .add(OpenBottomSheet(true));
-                          },
-                        );
-                      }).toList()),
+                                  enableDrag: false);
+                              context
+                                  .read<CommonBloc>()
+                                  .add(OpenBottomSheet(true));
+                            },
+                          );
+                        }).toList()),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -11,6 +11,36 @@ class SupplierController extends SupplierRepository {
   SupplierController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
+  Future<bool> editSupllier(
+      {required DocumentReference reference,
+      required String mobile,
+      required String name,
+      required String email}) async {
+    bool status = false;
+    status = await reference
+        .set({"name": name, "phoneNumber": int.parse(mobile), "email": email})
+        .then((value) => true)
+        .catchError((e) => false);
+
+    return status;
+  }
+
+  // addNewSupplier
+
+  Future<bool> addNewSupplier(
+      {required String mobile,
+      required String name,
+      required String email}) async {
+    bool status = false;
+    status = await FirebaseFirestore.instance
+        .collection("supplier")
+        .add({"name": name, "phoneNumber": int.parse(mobile), "email": email})
+        .then((value) => true)
+        .catchError((e) => false);
+
+    return status;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllSuppliers(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {
