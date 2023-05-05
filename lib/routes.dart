@@ -6,6 +6,8 @@ import 'package:abhay_chemicals/screens/expense/edit_expenses.dart';
 import 'package:abhay_chemicals/screens/home_screen.dart';
 import 'package:abhay_chemicals/screens/login_screen.dart';
 import 'package:abhay_chemicals/screens/production/add_production.dart';
+import 'package:abhay_chemicals/screens/purchase/add_purchase.dart';
+import 'package:abhay_chemicals/screens/purchase/purchase.dart';
 import 'package:abhay_chemicals/screens/sales/add_order.dart';
 import 'package:abhay_chemicals/screens/sales/add_sales.dart';
 import 'package:abhay_chemicals/screens/suppliers/add_suppliers.dart';
@@ -62,10 +64,15 @@ class MyRoutes {
       case '/editExpense':
         DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
         return _buildRoute(routeSettings, EditExpense(document: e));
+      case '/editPurchase':
+        DocumentSnapshot e = (routeSettings.arguments as DocumentSnapshot);
+        return _buildRoute(routeSettings, AddNewPurchase(documentSnapshot: e));
       case '/addCustomer':
         return _buildRoute(routeSettings, const AddCustomer());
       case '/addExpense':
         return _buildRoute(routeSettings, const AddExpense());
+      case '/addPurchase':
+        return _buildRoute(routeSettings, const AddNewPurchase());
       default:
         return _errorRoute();
     }

@@ -34,7 +34,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: const AddNewWithTitle(
-                      title: "Purchases", routeName: "/addPurchases"),
+                      title: "Purchases", routeName: "/addPurchase"),
                 ),
                 DataTable(
                     showCheckboxColumn: false,
@@ -68,30 +68,85 @@ class _AddPurchaseState extends State<AddPurchase> {
                           onSelectChanged: (value) {
                             showModalBottomSheet(
                                 isDismissible: false,
-                                isScrollControlled: false,
+                                isScrollControlled: true,
                                 context: context,
                                 builder: (context) => Container(
-                                      height: 350.h,
                                       color: const Color.fromARGB(
                                           255, 237, 246, 237),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: IconButton(
-                                              icon: const Icon(
-                                                Icons.close,
-                                                color: Colors.black,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.black,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
                                               ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                context
-                                                    .read<CommonBloc>()
-                                                    .add(OpenBottomSheet(true));
-                                              },
                                             ),
-                                          ),
-                                        ],
+                                            Container(
+                                              width: double.maxFinite,
+                                              padding: EdgeInsets.all(12),
+                                              child: Card(
+                                                child: DataTable(
+                                                  columns: [
+                                                    DataColumn(
+                                                        label: Text(
+                                                            "Batch Number :")),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            e['batchNumber'])),
+                                                  ],
+                                                  rows: [
+                                                    DataRow(cells: [
+                                                      DataCell(
+                                                          Text("Supplier :")),
+                                                      DataCell(Text(
+                                                          e["supplier"]
+                                                              .toString()))
+                                                    ]),
+                                                    DataRow(cells: [
+                                                      DataCell(Text("Date :")),
+                                                      DataCell(Text(
+                                                          e["date"].toString()))
+                                                    ]),
+                                                    DataRow(cells: [
+                                                      DataCell(Text(
+                                                          "Truck Number :")),
+                                                      DataCell(Text(
+                                                          e["truckNumber"]
+                                                              .toString()))
+                                                    ]),
+                                                    DataRow(cells: [
+                                                      DataCell(Text(
+                                                          "Gate Number :")),
+                                                      DataCell(Text(
+                                                          e["gateNumber"]
+                                                              .toString()))
+                                                    ]),
+                                                    DataRow(cells: [
+                                                      DataCell(
+                                                          Text("Item Name :")),
+                                                      DataCell(Text(
+                                                          e["item"].toString()))
+                                                    ]),
+                                                    DataRow(cells: [
+                                                      DataCell(
+                                                          Text("Quantity :")),
+                                                      DataCell(Text(
+                                                          e["quantity"]
+                                                              .toString()))
+                                                    ]),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                 enableDrag: false);
@@ -103,7 +158,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                             DataCell(Text(e['batchNumber'])),
                             DataCell(Text(e['date'])),
                             DataCell(Text(e['item'])),
-                            dataTableActions(context, e, "/"),
+                            dataTableActions(context, e, "/editPurchase"),
                           ]);
                     }).toList()),
                 Row(
@@ -187,42 +242,40 @@ class _AddPurchaseState extends State<AddPurchase> {
   // }
 }
 
+//  Flexible(
+//           child: StreamBuilder(
+//             stream: _purchase.snapshots(),
+//             builder: (context, streamSnapshot) {
+//               if (streamSnapshot.hasData) {
+//                 return Container(
+//                   child: ListView.builder(
+//                     itemBuilder: (context, index) {
+//                       final DocumentSnapshot documentSnapshot =
+//                           streamSnapshot.data!.docs[index];
 
-  //  Flexible(
-  //           child: StreamBuilder(
-  //             stream: _purchase.snapshots(),
-  //             builder: (context, streamSnapshot) {
-  //               if (streamSnapshot.hasData) {
-  //                 return Container(
-  //                   child: ListView.builder(
-  //                     itemBuilder: (context, index) {
-  //                       final DocumentSnapshot documentSnapshot =
-  //                           streamSnapshot.data!.docs[index];
-
-  //                       return Container(
-  //                         padding: const EdgeInsets.only(
-  //                             left: 20, right: 20, top: 20),
-  //                         child: Container(
-  //                           padding: EdgeInsets.all(12),
-  //                           color: Colors.green[50],
-  //                           child: Column(
-  //                             children: [
-  //                               Text(
-  //                                   "Created On : ${documentSnapshot['date']}"),
-  //                               Text(
-  //                                   "Batch No.: ${documentSnapshot['batchNumber']}"),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       );
-  //                     },
-  //                     itemCount: streamSnapshot.data!.docs.length,
-  //                   ),
-  //                 );
-  //               } else {
-  //                 return const Center(child: Text("Loading"));
-  //               }
-  //             },
-  //           ),
-  //         ),
-       
+//                       return Container(
+//                         padding: const EdgeInsets.only(
+//                             left: 20, right: 20, top: 20),
+//                         child: Container(
+//                           padding: EdgeInsets.all(12),
+//                           color: Colors.green[50],
+//                           child: Column(
+//                             children: [
+//                               Text(
+//                                   "Created On : ${documentSnapshot['date']}"),
+//                               Text(
+//                                   "Batch No.: ${documentSnapshot['batchNumber']}"),
+//                             ],
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                     itemCount: streamSnapshot.data!.docs.length,
+//                   ),
+//                 );
+//               } else {
+//                 return const Center(child: Text("Loading"));
+//               }
+//             },
+//           ),
+//         ),

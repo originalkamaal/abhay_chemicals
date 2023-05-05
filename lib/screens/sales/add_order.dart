@@ -2,6 +2,7 @@ import 'package:abhay_chemicals/common/consts/colors.dart';
 import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
+import 'package:abhay_chemicals/widgets/firestore_dropdown.dart';
 import 'package:abhay_chemicals/widgets/input_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,16 @@ class AddOrder extends StatefulWidget {
 }
 
 class _AddOrderState extends State<AddOrder> {
+  List<String> items = [
+    "Aarsh Jaivik",
+    "Bio Combi",
+    "Bio Starter",
+    "Humic",
+    "Gut-clean",
+    "AB Hy-Groth",
+    "AB Aqua Clean",
+    "AB Soil Care"
+  ];
   DateTime selectedDate = DateTime.now();
   String batchNumber = "";
   bool batchNumberError = false;
@@ -47,7 +58,7 @@ class _AddOrderState extends State<AddOrder> {
             children: [
               reusableText("Order Id", 20.w),
               buildTextInput(
-                placeHolder: "Enter Batch Number",
+                placeHolder: "Enter Order Id",
                 inputType: "number",
                 iconName: "ang",
                 onChange: ((value) {
@@ -66,27 +77,11 @@ class _AddOrderState extends State<AddOrder> {
                   iconName: "ang",
                   controller: controller),
               reusableText("Customer", 20.w),
-              buildTextInput(
-                placeHolder: "Enter Batch Number",
-                inputType: "text",
-                iconName: "ang",
-                onChange: ((value) {
-                  setState(() {
-                    batchNumber = value;
-                  });
-                }),
-              ),
+              FireStoreDropdown(
+                  collection: "customer", field: "name", onChanged: (value) {}),
               reusableText("Care Of", 20.w),
-              buildTextInput(
-                placeHolder: "Enter Batch Number",
-                inputType: "text",
-                iconName: "ang",
-                onChange: ((value) {
-                  setState(() {
-                    batchNumber = value;
-                  });
-                }),
-              ),
+              FireStoreDropdown(
+                  collection: "careof", field: "name", onChanged: (value) {}),
               reusableText("Product", 20.w),
               buildTextInput(
                 placeHolder: "Enter Batch Number",

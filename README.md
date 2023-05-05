@@ -72,8 +72,8 @@ Add Order - Pending
 View Purchase - Done
 Delet Purchase - Done
 View Purchase Detail - Done
-Add Purchase - Pending
-Edit Purchase - Pending
+Add Purchase - Done
+Edit Purchase - Done
 
 #### Expense
 
