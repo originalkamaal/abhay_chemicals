@@ -54,18 +54,18 @@ Edit Production - Done
 
 View Sales - Done
 Delet Sale - Done
-View Sale Details - Pending
+View Sale Details - Done
 Add Sale of an Order - Done
-Add Direct Sale - Pending
-Edit Sale - Pending
+Add Direct Sale - Done
+Edit Sale - Done
 
 #### Order
 
 View Order Details - Done
 Delet Order - Done
 View Orders - Done
-Edit Order - Pending
-Add Order - Pending
+Edit Order - Done
+Add Order - Done
 
 #### Purchase
 

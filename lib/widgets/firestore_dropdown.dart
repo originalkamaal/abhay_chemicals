@@ -7,11 +7,13 @@ class FireStoreDropdown extends StatefulWidget {
   final String collection;
   final String field;
   final String? selectedValue;
+  final bool isRef;
   final void Function(dynamic)? onChanged;
   const FireStoreDropdown(
       {super.key,
       required this.collection,
       required this.field,
+      this.isRef = false,
       this.selectedValue,
       required this.onChanged});
 
@@ -20,15 +22,15 @@ class FireStoreDropdown extends StatefulWidget {
 }
 
 class _FireStoreDropdownState extends State<FireStoreDropdown> {
+  bool careOfExists = false;
   String selectedSuplier = "0";
-  List<DropdownMenuItem> careofsItems = [];
+  late List<DropdownMenuItem> careofsItems = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.selectedValue != null) {
-      selectedSuplier = widget.selectedValue!;
+      selectedSuplier = widget.selectedValue!.toString();
     }
   }
 
@@ -42,7 +44,8 @@ class _FireStoreDropdownState extends State<FireStoreDropdown> {
           if (!snapShot.hasData) {
             return const CircularProgressIndicator();
           } else {
-            final careofs = snapShot.data!.docs.toList();
+            final careofs = snapShot.data!.docs.toSet().toList();
+
             careofsItems.clear();
             careofsItems.add(
               DropdownMenuItem(
@@ -54,14 +57,32 @@ class _FireStoreDropdownState extends State<FireStoreDropdown> {
                 ),
               ),
             );
+            Set<String> seen = {};
             for (DocumentSnapshot careof in careofs) {
-              careofsItems.add(DropdownMenuItem(
-                value: careof[widget.field],
-                child: Text(
-                  careof[widget.field],
-                  style: TextStyle(fontSize: 12.sp),
-                ),
-              ));
+              if (seen.contains(widget.isRef
+                  ? careof.reference.path
+                  : careof[widget.field])) {
+              } else {
+                careofsItems.add(DropdownMenuItem(
+                  value: widget.isRef
+                      ? careof.reference.path
+                      : careof[widget.field],
+                  child: Text(
+                    careof[widget.field],
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
+                ));
+                seen.add(widget.isRef
+                    ? careof.reference.path
+                    : careof[widget.field]);
+              }
+            }
+          }
+
+          for (var e in careofsItems) {
+            if (selectedSuplier == e.value) {
+              careOfExists = true;
+              continue;
             }
           }
 
@@ -76,12 +97,20 @@ class _FireStoreDropdownState extends State<FireStoreDropdown> {
             child: DropdownButtonHideUnderline(
                 child: DropdownButton(
               isExpanded: true,
-              value: selectedSuplier,
+              value: careOfExists == true ? selectedSuplier : "0",
               onChanged: (value) {
                 setState(() {
-                  selectedSuplier = value;
+                  selectedSuplier = value!.toString();
                 });
-                widget.onChanged!(value);
+                if (widget.isRef == true) {
+                  for (var e in snapShot.data!.docs) {
+                    if (e.reference.path == value) {
+                      widget.onChanged!(e['name']);
+                    }
+                  }
+                } else {
+                  widget.onChanged!(value);
+                }
               },
               items: careofsItems,
             )),

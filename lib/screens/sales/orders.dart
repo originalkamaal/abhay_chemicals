@@ -333,7 +333,7 @@ class _OrdersState extends State<Orders> {
                               DataCell(Text(e['orderId'].toString())),
                               DataCell(Text(e['date'])),
                               DataCell(Text(e['customer'])),
-                              dataTableActions(context, e, "/"),
+                              dataTableActions(context, e, "/editOrder"),
                             ]);
                       }).toList()),
                 ),

@@ -20,6 +20,34 @@ class OrdersController extends OrderReporsitory {
     return doc;
   }
 
+  static Future<bool> addOrder({
+    required String orderId,
+    required String date,
+    required String customer,
+    required String careof,
+    required String fullFilled,
+    required String village,
+    required String item,
+    required String quantity,
+  }) async {
+    bool status = false;
+    status = await FirebaseFirestore.instance
+        .collection("order")
+        .add({
+          "careOf": careof,
+          "customer": customer,
+          "date": date,
+          "fulfilled": fullFilled == "" ? 0 : int.parse(fullFilled),
+          "item": item,
+          "orderId": int.parse(orderId),
+          "quantity": int.parse(quantity),
+          "village": village,
+        })
+        .then((value) => true)
+        .catchError((onError) => false);
+    return status;
+  }
+
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders(
       {DocumentSnapshot? lastDoc, int limit = 10, String action = "init"}) {

@@ -1,5 +1,6 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
 import 'package:abhay_chemicals/controllers/orders_controller.dart';
+import 'package:abhay_chemicals/controllers/sales_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
 import 'package:abhay_chemicals/widgets/error_text.dart';
@@ -10,15 +11,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddOrder extends StatefulWidget {
+class AddDirectSales extends StatefulWidget {
   final DocumentSnapshot? document;
-  const AddOrder({super.key, this.document});
+  const AddDirectSales({super.key, this.document});
 
   @override
-  State<AddOrder> createState() => _AddOrderState();
+  State<AddDirectSales> createState() => _AddDirectSalesState();
 }
 
-class _AddOrderState extends State<AddOrder> {
+class _AddDirectSalesState extends State<AddDirectSales> {
   List<String> items = [
     "Aarsh Jaivik",
     "Bio Combi",
@@ -30,7 +31,7 @@ class _AddOrderState extends State<AddOrder> {
     "AB Soil Care"
   ];
   DateTime selectedDate = DateTime.now();
-  String orderId = "";
+  String challanNo = "";
   String customer = "";
   String careof = "";
   String fullFilled = "";
@@ -38,7 +39,7 @@ class _AddOrderState extends State<AddOrder> {
   String quantity = "";
   String village = "";
 
-  String orderIdErr = "";
+  String challanNoErr = "";
   String dateErr = "";
   String customerErr = "";
   String careofErr = "";
@@ -49,10 +50,10 @@ class _AddOrderState extends State<AddOrder> {
 
   validation() {
     bool status = true;
-    if (orderId == "") {
+    if (challanNo == "") {
       status = false;
       setState(() {
-        orderIdErr = "Please enter order id.";
+        challanNoErr = "Please enter challan number";
       });
     }
     if (controller.text == "") {
@@ -103,13 +104,12 @@ class _AddOrderState extends State<AddOrder> {
   initState() {
     super.initState();
     if (widget.document != null) {
-      orderId = widget.document!['orderId'].toString();
+      challanNo = widget.document!['challanNumber'].toString();
       customer = widget.document!['customer'];
       controller.text = widget.document!['date'];
-      careof = (widget.document!['careOf'] as DocumentReference).path;
+      careof = (widget.document!['careOf']);
 
       item = widget.document!['item'].toString();
-      fullFilled = widget.document!['fulfilled'].toString();
       quantity = widget.document!['quantity'].toString();
       village = widget.document!['village'];
     }
@@ -136,24 +136,24 @@ class _AddOrderState extends State<AddOrder> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
-        appBar: buildAppBar("Add New Order"),
+        appBar: buildAppBar("Add New Sales"),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
-              reusableText("Order Id", 20.w),
+              reusableText("Challan No", 20.w),
               buildTextInput(
                 placeHolder: "Enter Order Id",
                 inputType: "number",
                 iconName: "ang",
-                initialValue: orderId,
+                initialValue: challanNo,
                 onChange: ((value) {
                   setState(() {
-                    orderId = value;
+                    challanNo = value;
                   });
                 }),
               ),
-              ErrorText(nameErr: orderIdErr),
+              ErrorText(nameErr: challanNoErr),
               reusableText("Date", 10.w),
               buildDateInput(
                   onTap: () {
@@ -180,7 +180,7 @@ class _AddOrderState extends State<AddOrder> {
                   collection: "careof",
                   field: "name",
                   selectedValue: careof,
-                  isRef: true,
+                  isRef: false,
                   onChanged: (value) {
                     setState(() {
                       careof = value;
@@ -226,7 +226,7 @@ class _AddOrderState extends State<AddOrder> {
               GestureDetector(
                 onTap: () async {
                   setState(() {
-                    orderIdErr = "";
+                    challanNoErr = "";
                     dateErr = "";
                     customerErr = "";
                     careofErr = "";
@@ -235,15 +235,17 @@ class _AddOrderState extends State<AddOrder> {
                     villageErr = "";
                   });
                   if (validation()) {
-                    bool status = await OrdersController.addOrder(
-                        orderId: orderId,
-                        date: controller.text,
-                        customer: customer,
-                        careof: careof,
-                        fullFilled: fullFilled,
-                        village: village,
-                        item: item,
-                        quantity: quantity);
+                    bool status = await OrderSalesController.addDirectSales(
+                      careof: careof,
+                      challanNo: challanNo,
+                      customer: customer,
+                      date: controller.text,
+                      item: item,
+                      quantity: quantity,
+                      fullFilled: quantity,
+                      village: village,
+                      orderId: "0",
+                    );
                     if (status) {
                       Navigator.pop(context);
                     }

@@ -32,8 +32,8 @@ class _SalesState extends State<Sales> {
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              child:
-                  const AddNewWithTitle(title: "Sales", routeName: "/addSales"),
+              child: const AddNewWithTitle(
+                  title: "Sales", routeName: "/addDirectSales"),
             ),
             SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -72,10 +72,8 @@ class _SalesState extends State<Sales> {
                               isScrollControlled: false,
                               context: context,
                               builder: (context) => Container(
-                                    height: 350.h,
-                                    color: const Color.fromARGB(
-                                        255, 237, 246, 237),
-                                    child: Column(
+                                    color: Color.fromRGBO(237, 246, 237, 1),
+                                    child: ListView(
                                       children: [
                                         Align(
                                           alignment: Alignment.centerRight,
@@ -86,12 +84,49 @@ class _SalesState extends State<Sales> {
                                             ),
                                             onPressed: () {
                                               Navigator.pop(context);
-                                              context
-                                                  .read<CommonBloc>()
-                                                  .add(OpenBottomSheet(true));
                                             },
                                           ),
                                         ),
+                                        Card(
+                                          child: DataTable(
+                                            columns: [
+                                              DataColumn(
+                                                  label:
+                                                      Text('Challan Number')),
+                                              DataColumn(
+                                                  label: Text(e['challanNumber']
+                                                      .toString()))
+                                            ],
+                                            rows: [
+                                              DataRow(cells: [
+                                                DataCell(Text('Care Of')),
+                                                DataCell(Text(e['careOf']))
+                                              ]),
+                                              DataRow(cells: [
+                                                DataCell(Text('Customer')),
+                                                DataCell(Text(e['customer']))
+                                              ]),
+                                              DataRow(cells: [
+                                                DataCell(Text('Date')),
+                                                DataCell(Text(e['date']))
+                                              ]),
+                                              DataRow(cells: [
+                                                DataCell(Text('Item')),
+                                                DataCell(
+                                                    Text(e['item'].toString()))
+                                              ]),
+                                              DataRow(cells: [
+                                                DataCell(Text('Quantity')),
+                                                DataCell(Text(
+                                                    e['quantity'].toString()))
+                                              ]),
+                                              DataRow(cells: [
+                                                DataCell(Text('Village')),
+                                                DataCell(Text(e['village']))
+                                              ]),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -99,12 +134,12 @@ class _SalesState extends State<Sales> {
                           context.read<CommonBloc>().add(OpenBottomSheet(true));
                         },
                         cells: [
-                          DataCell(Text(e['orderId'] != 0
+                          DataCell(Text((e.data().containsKey('OrderID'))
                               ? e['orderId'].toString()
                               : "Direct")),
                           DataCell(Text(e['date'])),
                           DataCell(Text(e['customer'])),
-                          dataTableActions(context, e, "/"),
+                          dataTableActions(context, e, "/editSales"),
                         ]);
                   }).toList()),
             ),

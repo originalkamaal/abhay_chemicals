@@ -1,3 +1,4 @@
+import 'package:abhay_chemicals/screens/sales/add_direct_sales.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class SalesRepository {
@@ -10,6 +11,36 @@ class OrderSalesController extends SalesRepository {
 
   OrderSalesController({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+
+  static Future<bool> addDirectSales({
+    required String orderId,
+    required String challanNo,
+    required String date,
+    required String customer,
+    required String careof,
+    required String fullFilled,
+    required String village,
+    required String item,
+    required String quantity,
+  }) async {
+    bool status = false;
+    status = await FirebaseFirestore.instance
+        .collection("sales")
+        .add({
+          "careOf": careof,
+          "customer": customer,
+          "date": date,
+          "fulfilled": fullFilled == "" ? 0 : int.parse(fullFilled),
+          "item": item,
+          "orderId": int.parse(orderId),
+          "quantity": int.parse(quantity),
+          "village": village,
+          "challanNumber": challanNo
+        })
+        .then((value) => true)
+        .catchError((onError) => false);
+    return status;
+  }
 
   Future addNewSales(DocumentSnapshot e, int challanNo, int quantity) async {
     bool status = false;
