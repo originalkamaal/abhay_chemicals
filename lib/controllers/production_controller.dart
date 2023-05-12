@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/widgets/edit_comp_enrich.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class ProductionRepository {
@@ -85,5 +84,29 @@ class ProductionController extends ProductionRepository {
             .snapshots();
       }
     }
+  }
+
+  Future getAllPurchaseWithQuantity() async {
+    List<Map<String, dynamic>> data = [];
+    QuerySnapshot<Map<String, dynamic>> productions =
+        await _firebaseFirestore.collection("production").get();
+    QuerySnapshot<Map<String, dynamic>> purchases =
+        await _firebaseFirestore.collection("purchase").get();
+
+    for (var production in productions.docs) {
+      var k = production.data();
+      k.putIfAbsent("quantity", () => 0);
+      data.add(k);
+    }
+
+    for (var purchase in purchases.docs) {
+      for (var prods in data) {
+        if (prods['batchNumber'] == purchase['batchNumber']) {
+          prods['quantity'] += purchase['quantity'];
+        }
+      }
+    }
+
+    return data;
   }
 }

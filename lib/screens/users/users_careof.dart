@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/screens/sales/sales.dart';
 import 'package:abhay_chemicals/screens/users/careof_screen.dart';
 import 'package:abhay_chemicals/screens/users/view_users.dart';
 import 'package:flutter/material.dart';

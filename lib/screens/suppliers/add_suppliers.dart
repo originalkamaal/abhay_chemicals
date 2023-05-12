@@ -55,7 +55,7 @@ class _AddSupplierState extends State<AddSupplier> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Edit Supplier $name"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
               reusableText("Company or Individual Name", 20.w),
@@ -105,15 +105,15 @@ class _AddSupplierState extends State<AddSupplier> {
                     bool status = await SupplierController().addNewSupplier(
                         name: name, mobile: mobile, email: email);
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
-                  } else {
-                    print(mobile.length);
-                  }
+                  } else {}
                 },
                 child: filledButton(AppColors.primaryElement, "SUBMIT"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],

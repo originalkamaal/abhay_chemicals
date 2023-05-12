@@ -37,22 +37,6 @@ class _EditCareOfState extends State<EditCareOf> {
     mobile = widget.document['phoneNumber'].toString();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        firstDate: DateTime(
-            DateTime.now().year, DateTime.now().month - 1, DateTime.now().day),
-        initialDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 1));
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        controller.text = selectedDate.toString().split(" ")[0];
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +98,9 @@ class _EditCareOfState extends State<EditCareOf> {
                         mobile: int.parse(mobile));
 
                     if (status == true) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   } else {
                     if (name == "") {

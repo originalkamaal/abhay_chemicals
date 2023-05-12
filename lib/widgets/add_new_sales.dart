@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/controllers/sales_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +43,7 @@ class _AddNewSalesState extends State<AddNewSales> {
         ),
         Visibility(
             visible: error != "",
-            child: Center(
+            child: const Center(
               child: Text(
                 "",
                 style: TextStyle(color: Colors.red),
@@ -60,26 +59,26 @@ class _AddNewSalesState extends State<AddNewSales> {
         ),
         TextField(
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(hintText: "Challan No"),
+          decoration: const InputDecoration(hintText: "Challan No"),
           onChanged: (value) {
             setState(() {
               challanNo = int.parse(value);
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextField(
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(hintText: "Quantity"),
+          decoration: const InputDecoration(hintText: "Quantity"),
           onChanged: (value) {
             setState(() {
               quantity = int.parse(value);
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Row(
@@ -93,28 +92,20 @@ class _AddNewSalesState extends State<AddNewSales> {
                   });
                   Navigator.pop(context);
                 },
-                child: Text("Cancel")),
+                child: const Text("Cancel")),
             ElevatedButton(
                 onPressed: () async {
                   if (quantity != null && challanNo != null) {
                     setState(() {
                       error = "";
                     });
-                    bool status = await OrderSalesController().addNewSales(
-                      widget.e,
-                      challanNo!,
-                      quantity!,
-                    );
-                    if (status = true) {
-                      Navigator.pop(context);
-                    }
                   } else {
                     setState(() {
                       error = "Please fill all fields";
                     });
                   }
                 },
-                child: Text("Submit"))
+                child: const Text("Submit"))
           ],
         )
       ],

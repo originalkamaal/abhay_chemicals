@@ -24,15 +24,12 @@ class _KamaalDropDownTwoState extends State<KamaalDropDownTwo> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     menuItemsTwo = widget.menuItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Priting menuitems");
-    print(menuItemsTwo[0]['title']);
     return Container(
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
@@ -50,7 +47,7 @@ class _KamaalDropDownTwoState extends State<KamaalDropDownTwo> {
                     height: 16.w,
                     width: 16.w,
                   )
-                : SizedBox(
+                : const SizedBox(
                     width: 20,
                   ),
           ),
@@ -65,10 +62,9 @@ class _KamaalDropDownTwoState extends State<KamaalDropDownTwo> {
                   style: TextStyle(fontSize: 12.sp, color: Colors.black),
                   dropdownColor: const Color.fromARGB(255, 237, 246, 237),
                   items: menuItemsTwo.map((item) {
-                    print(item);
                     return DropdownMenuItem(
-                      child: Text(item['title']),
                       value: item['value'],
+                      child: Text(item['title']),
                     );
                   }).toList(),
                   onChanged: widget.onChanged),

@@ -2,7 +2,6 @@ import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/customers_bloc/customers_bloc.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -153,7 +152,7 @@ class _CustomersState extends State<Customers> {
                                                                             .data!["name"]
                                                                             .toString());
                                                                   })
-                                                              : Text(""),
+                                                              : const Text(""),
                                                           const SizedBox(
                                                             height: 10,
                                                           ),

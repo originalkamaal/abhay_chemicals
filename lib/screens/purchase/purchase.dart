@@ -90,11 +90,11 @@ class _AddPurchaseState extends State<AddPurchase> {
                                             ),
                                             Container(
                                               width: double.maxFinite,
-                                              padding: EdgeInsets.all(12),
+                                              padding: const EdgeInsets.all(12),
                                               child: Card(
                                                 child: DataTable(
                                                   columns: [
-                                                    DataColumn(
+                                                    const DataColumn(
                                                         label: Text(
                                                             "Batch Number :")),
                                                     DataColumn(
@@ -103,39 +103,40 @@ class _AddPurchaseState extends State<AddPurchase> {
                                                   ],
                                                   rows: [
                                                     DataRow(cells: [
-                                                      DataCell(
+                                                      const DataCell(
                                                           Text("Supplier :")),
                                                       DataCell(Text(
                                                           e["supplier"]
                                                               .toString()))
                                                     ]),
                                                     DataRow(cells: [
-                                                      DataCell(Text("Date :")),
+                                                      const DataCell(
+                                                          Text("Date :")),
                                                       DataCell(Text(
                                                           e["date"].toString()))
                                                     ]),
                                                     DataRow(cells: [
-                                                      DataCell(Text(
+                                                      const DataCell(Text(
                                                           "Truck Number :")),
                                                       DataCell(Text(
                                                           e["truckNumber"]
                                                               .toString()))
                                                     ]),
                                                     DataRow(cells: [
-                                                      DataCell(Text(
+                                                      const DataCell(Text(
                                                           "Gate Number :")),
                                                       DataCell(Text(
                                                           e["gateNumber"]
                                                               .toString()))
                                                     ]),
                                                     DataRow(cells: [
-                                                      DataCell(
+                                                      const DataCell(
                                                           Text("Item Name :")),
                                                       DataCell(Text(
                                                           e["item"].toString()))
                                                     ]),
                                                     DataRow(cells: [
-                                                      DataCell(
+                                                      const DataCell(
                                                           Text("Quantity :")),
                                                       DataCell(Text(
                                                           e["quantity"]

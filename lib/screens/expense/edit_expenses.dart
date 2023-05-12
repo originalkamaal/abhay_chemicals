@@ -19,7 +19,6 @@ class EditExpense extends StatefulWidget {
 class _EditExpenseState extends State<EditExpense> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     amount = widget.document['amount'].toString();
     description = widget.document['description'];
@@ -76,7 +75,7 @@ class _EditExpenseState extends State<EditExpense> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Add Expense"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
               ErrorText(nameErr: mainErr),
@@ -123,7 +122,9 @@ class _EditExpenseState extends State<EditExpense> {
                         amount: amount,
                         description: description);
                     if (status == true) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     } else {
                       setState(() {
                         mainErr = "something went wrong";

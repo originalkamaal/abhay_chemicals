@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +41,7 @@ class _AddNewPaltiState extends State<AddNewPalti> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
+        const Center(
           child: Text("Add New Palti Record"),
         ),
         Visibility(
@@ -64,7 +63,7 @@ class _AddNewPaltiState extends State<AddNewPalti> {
         ),
         TextField(
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(hintText: "Palti"),
+          decoration: const InputDecoration(hintText: "Palti"),
           onChanged: (value) {
             setState(() {
               palti = value;
@@ -73,7 +72,7 @@ class _AddNewPaltiState extends State<AddNewPalti> {
         ),
         TextField(
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(hintText: "Temperature"),
+          decoration: const InputDecoration(hintText: "Temperature"),
           onChanged: (value) {
             setState(() {
               temp = value;
@@ -82,14 +81,14 @@ class _AddNewPaltiState extends State<AddNewPalti> {
         ),
         TextField(
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(hintText: "Notes"),
+          decoration: const InputDecoration(hintText: "Notes"),
           onChanged: (value) {
             setState(() {
               notes = value;
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Row(
@@ -104,26 +103,17 @@ class _AddNewPaltiState extends State<AddNewPalti> {
                   });
                   Navigator.pop(context);
                 },
-                child: Text("Cancel")),
+                child: const Text("Cancel")),
             ElevatedButton(
                 onPressed: () async {
                   if (palti != "" && temp != "") {
-                    bool status = await ProductionController().addNewPalti(
-                        widget.e.reference,
-                        selectedDate.toString().split(' ')[0],
-                        palti,
-                        int.parse(temp),
-                        notes);
-                    if (status = true) {
-                      Navigator.pop(context);
-                    }
                   } else {
                     setState(() {
                       tempError = true;
                     });
                   }
                 },
-                child: Text("Submit"))
+                child: const Text("Submit"))
           ],
         )
       ],

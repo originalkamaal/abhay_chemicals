@@ -245,7 +245,9 @@ class _AddOrderState extends State<AddOrder> {
                         item: item,
                         quantity: quantity);
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 },

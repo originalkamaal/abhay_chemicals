@@ -23,7 +23,7 @@ Container metrixCard(
               color: Colors.grey.shade300,
               blurStyle: BlurStyle.outer)
         ],
-        color: backgroundColor != null ? backgroundColor : Colors.white,
+        color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(12)),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,7 +57,7 @@ Container metrixCard(
                 ),
                 const Text(" "),
                 Text(
-                  "since last ${type}",
+                  "since last $type",
                   style: TextStyle(
                       color:
                           backgroundColor != null ? Colors.white : Colors.black,
@@ -67,7 +67,7 @@ Container metrixCard(
             )
           ],
         ),
-        icon != null ? icon : Container()
+        icon ?? Container()
       ],
     ),
   );

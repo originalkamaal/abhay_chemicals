@@ -22,7 +22,9 @@ class AuthController {
       await FirebaseAuth.instance.signOut().then((value) =>
           Navigator.of(context)
               .pushNamedAndRemoveUntil("/signin", (route) => false));
-    } catch (e) {}
+    } catch (e) {
+      // do something with errr
+    }
   }
 
   void handleLoginIn(String type) async {
@@ -43,8 +45,12 @@ class AuthController {
               email: emailAddress, password: userPassword);
 
           if (creds.user != null) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/home', (route) => false);
+            if (context.mounted) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/home', (route) => false);
+            } else {
+              return;
+            }
           } else if (creds.user == null) {
             return;
           }
@@ -57,6 +63,8 @@ class AuthController {
           }
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      //
+    }
   }
 }

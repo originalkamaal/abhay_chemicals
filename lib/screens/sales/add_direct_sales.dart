@@ -1,5 +1,4 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:abhay_chemicals/controllers/orders_controller.dart';
 import 'package:abhay_chemicals/controllers/sales_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
@@ -247,7 +246,9 @@ class _AddDirectSalesState extends State<AddDirectSales> {
                       orderId: "0",
                     );
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 },

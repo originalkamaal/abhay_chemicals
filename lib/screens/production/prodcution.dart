@@ -1,14 +1,11 @@
 import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/production_bloc/production_bloc.dart';
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/purchase_controller.dart';
 import 'package:abhay_chemicals/widgets/add_new_palti.dart';
 import 'package:abhay_chemicals/widgets/add_new_with_title.dart';
 import 'package:abhay_chemicals/widgets/edit_comp_enrich.dart';
-import 'package:abhay_chemicals/widgets/purchase_table_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -43,7 +43,7 @@ class _AddSalesState extends State<AddSales> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Add Direct Sales"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
               reusableText("Challan No", 20.w),
@@ -67,7 +67,7 @@ class _AddSalesState extends State<AddSales> {
                   iconName: "ang",
                   controller: controller),
               Container(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: CheckboxMenuButton(
                     value: isNewCustomer,
                     onChanged: (value) {
@@ -157,13 +157,15 @@ class _AddSalesState extends State<AddSales> {
                     bool status = await ProductionController()
                         .addProduction(controller.text, batchNumber);
                     if (status == true) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 },
                 child: filledButton(AppColors.primaryElement, "SUBMIT"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],

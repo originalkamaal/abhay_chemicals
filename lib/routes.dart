@@ -7,7 +7,6 @@ import 'package:abhay_chemicals/screens/home_screen.dart';
 import 'package:abhay_chemicals/screens/login_screen.dart';
 import 'package:abhay_chemicals/screens/production/add_production.dart';
 import 'package:abhay_chemicals/screens/purchase/add_purchase.dart';
-import 'package:abhay_chemicals/screens/purchase/purchase.dart';
 import 'package:abhay_chemicals/screens/sales/add_direct_sales.dart';
 import 'package:abhay_chemicals/screens/sales/add_order.dart';
 import 'package:abhay_chemicals/screens/sales/add_sales.dart';

@@ -1,5 +1,4 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/supplier_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
@@ -30,7 +29,6 @@ class _EditSupplierState extends State<EditSupplier> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = widget.document['name'];
     mobile = widget.document['phoneNumber'].toString();
@@ -68,7 +66,7 @@ class _EditSupplierState extends State<EditSupplier> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Edit Supplier $name"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
               reusableText("Company or Individual Name", 20.w),
@@ -124,15 +122,15 @@ class _EditSupplierState extends State<EditSupplier> {
                         mobile: mobile,
                         email: email);
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
-                  } else {
-                    print(mobile.length);
-                  }
+                  } else {}
                 },
                 child: filledButton(AppColors.primaryElement, "SUBMIT"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],

@@ -1,5 +1,4 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/users_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
@@ -8,7 +7,6 @@ import 'package:abhay_chemicals/widgets/error_text.dart';
 import 'package:abhay_chemicals/widgets/input_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -138,7 +136,6 @@ class _EditAdminState extends State<EditAdmin> {
                 icon: "person",
                 selectedItem: selectedItem,
                 onChanged: (value) {
-                  print(value);
                   setState(() {
                     selectedItem = value!;
                   });
@@ -165,7 +162,9 @@ class _EditAdminState extends State<EditAdmin> {
                         role: selectedItem.toLowerCase());
 
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     } else {
                       setState(() {
                         mainErr = "Something went wrong.. try later";

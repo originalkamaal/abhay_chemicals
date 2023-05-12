@@ -80,7 +80,9 @@ class _AddCareOfState extends State<AddCareOf> {
                         name: name, email: email, mobile: int.parse(mobile));
 
                     if (status == true) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   } else {
                     if (name == "") {

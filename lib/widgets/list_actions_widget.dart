@@ -26,7 +26,7 @@ DataCell dataTableActions(
         ),
       ),
       Visibility(
-        visible: route != null && route != "",
+        visible: route != "",
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).pushNamed(route, arguments: e);

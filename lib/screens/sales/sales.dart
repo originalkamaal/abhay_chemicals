@@ -72,7 +72,8 @@ class _SalesState extends State<Sales> {
                               isScrollControlled: false,
                               context: context,
                               builder: (context) => Container(
-                                    color: Color.fromRGBO(237, 246, 237, 1),
+                                    color:
+                                        const Color.fromRGBO(237, 246, 237, 1),
                                     child: ListView(
                                       children: [
                                         Align(
@@ -90,7 +91,7 @@ class _SalesState extends State<Sales> {
                                         Card(
                                           child: DataTable(
                                             columns: [
-                                              DataColumn(
+                                              const DataColumn(
                                                   label:
                                                       Text('Challan Number')),
                                               DataColumn(
@@ -99,29 +100,31 @@ class _SalesState extends State<Sales> {
                                             ],
                                             rows: [
                                               DataRow(cells: [
-                                                DataCell(Text('Care Of')),
+                                                const DataCell(Text('Care Of')),
                                                 DataCell(Text(e['careOf']))
                                               ]),
                                               DataRow(cells: [
-                                                DataCell(Text('Customer')),
+                                                const DataCell(
+                                                    Text('Customer')),
                                                 DataCell(Text(e['customer']))
                                               ]),
                                               DataRow(cells: [
-                                                DataCell(Text('Date')),
+                                                const DataCell(Text('Date')),
                                                 DataCell(Text(e['date']))
                                               ]),
                                               DataRow(cells: [
-                                                DataCell(Text('Item')),
+                                                const DataCell(Text('Item')),
                                                 DataCell(
                                                     Text(e['item'].toString()))
                                               ]),
                                               DataRow(cells: [
-                                                DataCell(Text('Quantity')),
+                                                const DataCell(
+                                                    Text('Quantity')),
                                                 DataCell(Text(
                                                     e['quantity'].toString()))
                                               ]),
                                               DataRow(cells: [
-                                                DataCell(Text('Village')),
+                                                const DataCell(Text('Village')),
                                                 DataCell(Text(e['village']))
                                               ]),
                                             ],
@@ -207,7 +210,7 @@ class _SalesState extends State<Sales> {
         ),
       );
     } else {
-      return Text("Loading");
+      return const Text("Loading");
     }
   }
 }

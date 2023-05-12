@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
 
-  User? firebaseUser = FirebaseAuth.instance.currentUser;
+  late final User? firebaseUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {

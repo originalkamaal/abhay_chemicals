@@ -65,7 +65,7 @@ class _AddExpenseState extends State<AddExpense> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Add Expense"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
               ErrorText(nameErr: mainErr),
@@ -109,7 +109,9 @@ class _AddExpenseState extends State<AddExpense> {
                         amount: amount,
                         description: description);
                     if (status == true) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     } else {
                       setState(() {
                         mainErr = "something went wrong";

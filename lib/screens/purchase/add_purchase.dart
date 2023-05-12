@@ -40,7 +40,6 @@ class _AddNewPurchaseState extends State<AddNewPurchase> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.documentSnapshot != null) {
       editmode = true;
@@ -231,7 +230,9 @@ class _AddNewPurchaseState extends State<AddNewPurchase> {
                           quantity: quantity,
                         );
                         if (status) {
-                          Navigator.pop(context);
+                          if (mounted) {
+                            Navigator.pop(context);
+                          }
                         } else {
                           setState(() {
                             mainErr = "Something went wrong";

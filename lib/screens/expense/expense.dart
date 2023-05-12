@@ -1,4 +1,3 @@
-import 'package:abhay_chemicals/blocs/common_bloc/common_bloc.dart';
 import 'package:abhay_chemicals/blocs/expense_bloc/expense_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,7 +66,7 @@ class _ExpenseState extends State<Expense> {
                         DataCell(Center(
                           child: Text(
                             e['amount'].toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )),
                         DataCell(Text(e['description'])),

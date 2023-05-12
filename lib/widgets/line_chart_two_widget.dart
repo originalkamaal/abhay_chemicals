@@ -1,13 +1,13 @@
-import 'package:abhay_chemicals/widgets/bar_chart.dart';
+import 'package:abhay_chemicals/widgets/line_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-Padding barChartByKamaal(
+Padding lineChartByKamaalTwo(
     {required List<String> field,
-    required List<Color> colors,
     required List<int> multipliers,
     required List<String> dataNames,
-    required List<List<QueryDocumentSnapshot<Map<String, dynamic>>>> docs,
+    required List<Color> colors,
+    required List<List<Map<String, dynamic>>> docs,
     required String xName,
     required int noOfBars,
     required String yName}) {
@@ -19,31 +19,8 @@ Padding barChartByKamaal(
         List<List<double>> data = [];
         List<String> titles = [];
         int maxY = 0;
-        List<String> months = [
-          "JAN",
-          "FEB",
-          "MAR",
-          "APR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AUG",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DEC"
-        ];
-        var monthlyData = [];
 
-        DateTime current = DateTime.now();
-        for (var i = 0; i < 12; i++) {
-          int month = current.subtract(Duration(days: 30 * i)).month;
-          int year = current.subtract(Duration(days: 30 * i)).year;
-          monthlyData.add({
-            "month": "${months[month - 1]}-$year",
-            "value": field.map((e) => 0.0).toList()
-          });
-        }
+        List<String> monthlyData = [];
 
         for (var i = 0; i < docs.length; i++) {
           var arr = docs[i];
@@ -77,7 +54,7 @@ Padding barChartByKamaal(
           titles.add(monthlyData[i]['month']);
         }
 
-        return ChartOne(
+        return ChartTwo(
             dataNames: dataNames,
             colors: colors,
             xName: xName,

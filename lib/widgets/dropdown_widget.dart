@@ -34,7 +34,7 @@ class KamaalDropDown extends StatelessWidget {
                     height: 16.w,
                     width: 16.w,
                   )
-                : SizedBox(
+                : const SizedBox(
                     width: 20,
                   ),
           ),

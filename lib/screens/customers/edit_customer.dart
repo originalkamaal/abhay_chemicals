@@ -35,7 +35,6 @@ class _EditCustomerState extends State<EditCustomer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = widget.documentSnapshot['name'];
     mobile = widget.documentSnapshot['phoneNumber'].toString();
@@ -151,8 +150,8 @@ class _EditCustomerState extends State<EditCustomer> {
                     builder: (context, snapShot) {
                       List<DropdownMenuItem> careofsItems = [];
                       careofsItems.add(DropdownMenuItem(
-                        child: reusableText("Select Careof", 0),
                         value: "0",
+                        child: reusableText("Select Careof", 0),
                       ));
                       if (!snapShot.hasData) {
                         return const CircularProgressIndicator();
@@ -160,16 +159,16 @@ class _EditCustomerState extends State<EditCustomer> {
                         final careofs = snapShot.data!.docs.toList();
                         for (var careof in careofs) {
                           careofsItems.add(DropdownMenuItem(
+                            value: careof.reference.path,
                             child: Text(
                               careof['name'],
                               style: TextStyle(fontSize: 12.sp),
                             ),
-                            value: careof.reference.path,
                           ));
                         }
                       }
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         alignment: Alignment.centerRight,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.w),
@@ -182,7 +181,6 @@ class _EditCustomerState extends State<EditCustomer> {
                           isExpanded: false,
                           value: selectedCareOf,
                           onChanged: (value) {
-                            print(value);
                             setState(() {
                               selectedCareOf = value.toString();
                             });
@@ -277,7 +275,9 @@ class _EditCustomerState extends State<EditCustomer> {
                             shippingAddress: isSameAsBill ? badd : sadd,
                             shippingPin: isSameAsBill ? (bpin) : (spin));
                         if (status) {
-                          Navigator.pop(ctx);
+                          if (mounted) {
+                            Navigator.pop(ctx);
+                          }
                         } else {
                           setState(() {
                             mainErr = "Something went wrong..";

@@ -22,7 +22,6 @@ class _StaticDropDownState extends State<StaticDropDown> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.selectedItem != "") {
       selectedSuplier = widget.selectedItem!;

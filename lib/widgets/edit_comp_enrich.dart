@@ -1,7 +1,5 @@
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditCompEnrich extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> e;
@@ -52,14 +50,14 @@ class _EditCompEnrichState extends State<EditCompEnrich> {
         ),
         TextField(
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(hintText: "Notes"),
+          decoration: const InputDecoration(hintText: "Notes"),
           onChanged: (value) {
             setState(() {
               notes = value;
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Row(
@@ -72,19 +70,8 @@ class _EditCompEnrichState extends State<EditCompEnrich> {
                   });
                   Navigator.pop(context);
                 },
-                child: Text("Cancel")),
-            ElevatedButton(
-                onPressed: () async {
-                  bool status = await ProductionController().editCompEnrich(
-                      widget.e.reference,
-                      selectedDate.toString().split(' ')[0],
-                      notes,
-                      widget.edit);
-                  if (status = true) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text("Submit"))
+                child: const Text("Cancel")),
+            ElevatedButton(onPressed: () async {}, child: const Text("Submit"))
           ],
         )
       ],

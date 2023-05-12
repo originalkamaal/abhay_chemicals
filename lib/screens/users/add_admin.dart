@@ -1,5 +1,4 @@
 import 'package:abhay_chemicals/common/consts/colors.dart';
-import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/controllers/users_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
@@ -123,7 +122,6 @@ class _AddAdminState extends State<AddAdmin> {
                 icon: "person",
                 selectedItem: selectedItem,
                 onChanged: (value) {
-                  print(value);
                   setState(() {
                     selectedItem = value!;
                   });
@@ -172,15 +170,15 @@ class _AddAdminState extends State<AddAdmin> {
                         password: pass);
 
                     if (status) {
-                      Navigator.pop(context);
+                      if (mounted) {
+                        Navigator.pop(context);
+                      }
                     } else {
                       setState(() {
                         mainErr = "Something went wrong.. try later";
                       });
                     }
-                  } else {
-                    print("not ok");
-                  }
+                  } else {}
                   // if (batchNumber != "" && controller.text != "") {
                   //   bool status = await ProductionController()
                   //       .addProduction(controller.text, batchNumber);

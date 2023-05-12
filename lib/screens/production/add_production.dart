@@ -3,10 +3,7 @@ import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/widgets/appbar_widget.dart';
 import 'package:abhay_chemicals/widgets/buttons_widgets.dart';
 import 'package:abhay_chemicals/widgets/input_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProduction extends StatefulWidget {
@@ -44,7 +41,7 @@ class _EditProductionState extends State<EditProduction> {
         backgroundColor: Colors.white,
         appBar: buildAppBar("Add Production"),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,8 +59,8 @@ class _EditProductionState extends State<EditProduction> {
               ),
               Visibility(
                   visible: batchNumberError == true,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       "Please fill correct details..",
                       style: TextStyle(color: Colors.red),
@@ -84,7 +81,9 @@ class _EditProductionState extends State<EditProduction> {
                       bool status = await ProductionController()
                           .addProduction(controller.text, batchNumber);
                       if (status == true) {
-                        Navigator.pop(context);
+                        if (mounted) {
+                          Navigator.pop(context);
+                        }
                       }
                     }
                   },
