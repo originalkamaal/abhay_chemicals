@@ -1,6 +1,5 @@
 import 'package:abhay_chemicals/controllers/production_controller.dart';
 import 'package:abhay_chemicals/widgets/bar_chart_widget.dart';
-import 'package:abhay_chemicals/widgets/line_chart_two_widget.dart';
 import 'package:abhay_chemicals/widgets/line_chart_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -163,34 +162,12 @@ class _HomeState extends State<Home> {
                                                       snapShot4.data
                                                     ],
                                                     xName: "Months",
-                                                    noOfBars: 6,
+                                                    noOfBars: 5,
                                                     yName: 'Quantity'),
                                               ),
                                             ],
                                           );
-                                          return Container();
                                         }),
-                                    lineChartByKamaalTwo(
-                                        field: [
-                                          "quantity"
-                                        ],
-                                        multipliers: [
-                                          1
-                                        ],
-                                        dataNames: [
-                                          "CareofSales"
-                                        ],
-                                        colors: [
-                                          Colors.green.shade900
-                                        ],
-                                        docs: [
-                                          snapShot1.data!.docs
-                                              .map((e) => e.data())
-                                              .toList()
-                                        ],
-                                        xName: "Care Ofs",
-                                        noOfBars: 5,
-                                        yName: "Quantity"),
                                   ],
                                 );
                               } else {
