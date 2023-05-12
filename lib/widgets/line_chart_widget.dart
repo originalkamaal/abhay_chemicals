@@ -1,5 +1,4 @@
 import 'package:abhay_chemicals/widgets/line_chart.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Padding lineChartByKamaal(
@@ -34,6 +33,7 @@ Padding lineChartByKamaal(
           "DEC"
         ];
         var monthlyData = [];
+        // print(docs);
 
         DateTime current = DateTime.now();
         for (var i = 0; i < 12; i++) {

@@ -71,6 +71,12 @@ class ChartTwo extends StatelessWidget {
 
   Widget getBottomTiles(double value, TitleMeta meta) {
     const style = TextStyle(color: Colors.black, fontSize: 10);
+    if (value * 10 % 10 > 0) {
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: const Text(""),
+      );
+    }
 
     Widget text = Text(
       titles[value.toInt()],
