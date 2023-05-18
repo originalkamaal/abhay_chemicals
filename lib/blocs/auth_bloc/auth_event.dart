@@ -28,3 +28,11 @@ class RegisterNameEvent extends AuthEvent {
   final String name;
   const RegisterNameEvent(this.name);
 }
+
+class LoginRequested extends AuthEvent {
+  final BuildContext context;
+  final String email;
+  final String password;
+
+  LoginRequested(this.context, this.email, this.password);
+}

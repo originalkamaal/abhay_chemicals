@@ -36,3 +36,11 @@ class AuthState {
         name: name ?? this.name);
   }
 }
+
+class AuthLoading extends AuthState {}
+
+class AuthFailed extends AuthState {
+  final String message;
+
+  AuthFailed({required this.message});
+}

@@ -1,21 +1,23 @@
-import 'package:abhay_chemicals/controllers/sales_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddNewSales extends StatefulWidget {
+class EditPatli extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> e;
 
-  const AddNewSales({super.key, required this.e});
+  const EditPatli({super.key, required this.e});
 
   @override
-  State<AddNewSales> createState() => _AddNewSalesState();
+  State<EditPatli> createState() => _EditPatliState();
 }
 
-class _AddNewSalesState extends State<AddNewSales> {
+class _EditPatliState extends State<EditPatli> {
   DateTime selectedDate = DateTime.now();
-  int? challanNo;
-  int? quantity;
-  String error = "";
+  String temp = "";
+  String notes = "";
+  String palti = "";
+  bool tempError = false;
+  bool paltiError = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,17 +41,18 @@ class _AddNewSalesState extends State<AddNewSales> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: Text("Add New Sales Order Id #${widget.e['orderId']}"),
+        const Center(
+          child: Text("Add New Palti Record"),
         ),
         Visibility(
-            visible: error != "",
-            child: const Center(
-              child: Text(
-                "",
-                style: TextStyle(color: Colors.red),
-              ),
-            )),
+          visible: tempError == true,
+          child: Center(
+            child: Text(
+              "Something Went Wrong..",
+              style: TextStyle(color: Colors.red, fontSize: 12.sp),
+            ),
+          ),
+        ),
         Row(
           children: [
             Text("${selectedDate.toLocal()}".split(' ')[0]),
@@ -59,23 +62,29 @@ class _AddNewSalesState extends State<AddNewSales> {
           ],
         ),
         TextField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(hintText: "Challan No"),
+          keyboardType: TextInputType.text,
+          decoration: const InputDecoration(hintText: "Palti"),
           onChanged: (value) {
             setState(() {
-              challanNo = int.parse(value);
+              palti = value;
             });
           },
         ),
-        const SizedBox(
-          height: 10,
-        ),
         TextField(
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(hintText: "Quantity"),
+          decoration: const InputDecoration(hintText: "Temperature"),
           onChanged: (value) {
             setState(() {
-              quantity = value == "" ? 0 : int.parse(value);
+              temp = value;
+            });
+          },
+        ),
+        TextField(
+          keyboardType: TextInputType.text,
+          decoration: const InputDecoration(hintText: "Notes"),
+          onChanged: (value) {
+            setState(() {
+              notes = value;
             });
           },
         ),
@@ -88,27 +97,19 @@ class _AddNewSalesState extends State<AddNewSales> {
             TextButton(
                 onPressed: () {
                   setState(() {
-                    quantity = null;
-                    challanNo = null;
+                    palti = "";
+                    temp = "";
+                    notes = "";
                   });
                   Navigator.pop(context);
                 },
                 child: const Text("Cancel")),
             ElevatedButton(
                 onPressed: () async {
-                  if (quantity != null && challanNo != null) {
-                    setState(() {
-                      error = "";
-                    });
-
-                    await OrderSalesController()
-                        .addNewSales(widget.e, challanNo!, quantity!);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                    }
+                  if (palti != "" && temp != "") {
                   } else {
                     setState(() {
-                      error = "Please fill all fields";
+                      tempError = true;
                     });
                   }
                 },

@@ -106,7 +106,9 @@ class _AddOrderState extends State<AddOrder> {
       orderId = widget.document!['orderId'].toString();
       customer = widget.document!['customer'];
       controller.text = widget.document!['date'];
-      careof = (widget.document!['careOf'] as DocumentReference).path;
+      careof = widget.document!.get('careOf') != null
+          ? (widget.document!['careOf'] as DocumentReference).path
+          : "0";
 
       item = widget.document!['item'].toString();
       fullFilled = widget.document!['fulfilled'].toString();

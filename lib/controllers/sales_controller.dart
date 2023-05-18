@@ -44,27 +44,43 @@ class OrderSalesController extends SalesRepository {
   Future addNewSales(DocumentSnapshot e, int challanNo, int quantity) async {
     bool status = false;
 
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.doc((e['careOf'] as DocumentReference).path);
-    status = await documentReference.get().then((careOf) async {
-      if (careOf.exists) {
-        return await _firebaseFirestore.collection("sales").add({
-          "careOf": careOf['name'],
-          "challanNumber": challanNo,
-          "customer": e['customer'],
-          "date": e['date'],
-          "item": e['item'],
-          "orderId": e['orderId'],
-          "phoneNumber": careOf['phoneNumber'],
-          "quantity": quantity,
-          "village": e['village'],
-        }).then((value) {
-          return true;
-        });
-      } else {
-        return false;
-      }
-    });
+    if (e.get('careOf') == null) {
+      return await _firebaseFirestore.collection("sales").add({
+        "careOf": null,
+        "challanNumber": challanNo,
+        "customer": e['customer'],
+        "date": e['date'],
+        "item": e['item'],
+        "orderId": e['orderId'],
+        "phoneNumber": null,
+        "quantity": quantity,
+        "village": e['village'],
+      }).then((value) {
+        return true;
+      });
+    } else {
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .doc((e['careOf'] as DocumentReference).path);
+      status = await documentReference.get().then((careOf) async {
+        if (careOf.exists) {
+          return await _firebaseFirestore.collection("sales").add({
+            "careOf": careOf['name'],
+            "challanNumber": challanNo,
+            "customer": e['customer'],
+            "date": e['date'],
+            "item": e['item'],
+            "orderId": e['orderId'],
+            "phoneNumber": careOf['phoneNumber'],
+            "quantity": quantity,
+            "village": e['village'],
+          }).then((value) {
+            return true;
+          });
+        } else {
+          return false;
+        }
+      });
+    }
 
     return status;
   }

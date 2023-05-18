@@ -27,44 +27,43 @@ class AuthController {
     }
   }
 
-  void handleLoginIn(String type) async {
+  Future<void> handleLoginIn(String type, String email, String password) async {
     try {
       if (type == "email") {
         final state = context.read<AuthBloc>().state;
-        String emailAddress = state.email;
-        String userPassword = state.password;
 
-        if (emailAddress.isEmpty) {
-          return;
+        if (email.isEmpty) {
+          throw Exception("Email is required");
         }
-        if (userPassword.isEmpty) {
-          return;
+        if (password.isEmpty) {
+          throw Exception("Password is required");
         }
         try {
-          final creds = await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: emailAddress, password: userPassword);
+          final creds = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email, password: password);
 
           if (creds.user != null) {
             if (context.mounted) {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/home', (route) => false);
-            } else {
-              return;
-            }
+            } else {}
           } else if (creds.user == null) {
-            return;
+            throw Exception("Something went wrong");
           }
           if (!creds.user!.emailVerified) {}
         } on FirebaseAuthException catch (e) {
           if (e.code == "user-not-found") {
-            return;
+            throw Exception("User not found");
           } else if (e.code == "wrong-password") {
-            return;
+            throw Exception("Invalid credentials");
           }
         }
+      } else {
+        throw Exception("Email is required");
       }
     } catch (e) {
-      //
+      print(e.toString());
+      throw Exception("Something went wrong");
     }
   }
 }

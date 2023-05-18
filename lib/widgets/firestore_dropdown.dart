@@ -42,7 +42,7 @@ class _FireStoreDropdownState extends State<FireStoreDropdown> {
             .snapshots(),
         builder: (context, snapShot) {
           if (!snapShot.hasData) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else {
             final careofs = snapShot.data!.docs.toSet().toList();
 

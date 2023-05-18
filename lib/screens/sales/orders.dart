@@ -102,10 +102,6 @@ class _OrdersState extends State<Orders> {
                                                   ),
                                                   onPressed: () {
                                                     Navigator.pop(context);
-                                                    context
-                                                        .read<CommonBloc>()
-                                                        .add(OpenBottomSheet(
-                                                            true));
                                                   },
                                                 ),
                                               ),

@@ -1,4 +1,6 @@
+import 'package:abhay_chemicals/controllers/auth_controller.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
@@ -11,6 +13,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterMobileEvent>(_registerMobileEvent);
     on<RegisterEmailEvent>(_registerEmailEvent);
     on<RegisterNameEvent>(_registerNameEvent);
+    on<LoginRequested>(_loginRequested);
+  }
+
+  void _loginRequested(LoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await AuthController(context: event.context)
+          .handleLoginIn("email", event.email, event.password);
+      emit(AuthState());
+      // emit(AuthFailed());
+    } catch (e) {
+      ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        backgroundColor: Colors.black,
+      ));
+      emit(AuthFailed(message: e.toString()));
+    }
   }
 
   void _loginEmailEvent(LoginEmailEvent event, Emitter<AuthState> emit) {

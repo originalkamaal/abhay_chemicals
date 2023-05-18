@@ -140,33 +140,37 @@ class _HomeState extends State<Home> {
                                           // print(snapShot4.data);
 
                                           return Column(
-                                            children: [
-                                              chartTitle(
-                                                  "Productions ( Monthly)"),
-                                              Card(
-                                                elevation: 5,
-                                                child: lineChartByKamaal(
-                                                    field: [
-                                                      "quantity"
-                                                    ],
-                                                    multipliers: [
-                                                      1
-                                                    ],
-                                                    dataNames: [
-                                                      'dataNames'
-                                                    ],
-                                                    colors: [
-                                                      Colors.green.shade900
-                                                    ],
-                                                    docs: [
-                                                      snapShot4.data
-                                                    ],
-                                                    xName: "Months",
-                                                    noOfBars: 5,
-                                                    yName: 'Quantity'),
-                                              ),
-                                            ],
-                                          );
+                                              children: snapShot4.data != null
+                                                  ? [
+                                                      chartTitle(
+                                                          "Productions ( Monthly)"),
+                                                      Card(
+                                                        elevation: 5,
+                                                        child:
+                                                            lineChartByKamaal(
+                                                                field: [
+                                                              "quantity"
+                                                            ],
+                                                                multipliers: [
+                                                              1
+                                                            ],
+                                                                dataNames: [
+                                                              'dataNames'
+                                                            ],
+                                                                colors: [
+                                                              Colors.green
+                                                                  .shade900
+                                                            ],
+                                                                docs: [
+                                                              snapShot4.data
+                                                            ],
+                                                                xName: "Months",
+                                                                noOfBars: 5,
+                                                                yName:
+                                                                    'Quantity'),
+                                                      ),
+                                                    ]
+                                                  : []);
                                         }),
                                   ],
                                 );

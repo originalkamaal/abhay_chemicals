@@ -65,17 +65,19 @@ class _EditAdminState extends State<EditAdmin> {
       });
       status = false;
     }
-    if (pass.length < 8) {
-      setState(() {
-        passErr = "password must be atleast 8 char";
-      });
-      status = false;
-    }
-    if (pass != cpass || cpass == "") {
-      setState(() {
-        cpassErr = "passwords not matching";
-      });
-      status = false;
+    if (selectedItem == "Admin") {
+      if (pass.length < 8) {
+        setState(() {
+          passErr = "password must be atleast 8 char";
+        });
+        status = false;
+      }
+      if (pass != cpass || cpass == "") {
+        setState(() {
+          cpassErr = "passwords not matching";
+        });
+        status = false;
+      }
     }
     return status;
   }
@@ -85,7 +87,7 @@ class _EditAdminState extends State<EditAdmin> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
-        appBar: buildAppBar("Add Employee"),
+        appBar: buildAppBar("Edit Employee"),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
@@ -141,7 +143,38 @@ class _EditAdminState extends State<EditAdmin> {
                   });
                 },
               ),
-              ErrorText(nameErr: cpassErr),
+              Visibility(
+                visible: selectedItem == "Admin",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    reusableText("Password", 20.w),
+                    buildTextInput(
+                      placeHolder: "Enter Password",
+                      inputType: "password",
+                      iconName: "lock",
+                      onChange: ((value) {
+                        setState(() {
+                          pass = value;
+                        });
+                      }),
+                    ),
+                    ErrorText(nameErr: passErr),
+                    reusableText("Confirm Password", 20.w),
+                    buildTextInput(
+                      placeHolder: "Confirm Password",
+                      inputType: "password",
+                      iconName: "lock",
+                      onChange: ((value) {
+                        setState(() {
+                          cpass = value;
+                        });
+                      }),
+                    ),
+                    ErrorText(nameErr: cpassErr),
+                  ],
+                ),
+              ),
               GestureDetector(
                 onTap: () async {
                   if (validation()) {

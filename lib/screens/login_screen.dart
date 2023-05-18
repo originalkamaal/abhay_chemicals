@@ -17,10 +17,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email = "";
+  String password = "";
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
+        if (state is AuthFailed) {
+          if (context.mounted) {}
+        }
         return Scaffold(
           // resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
@@ -34,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Center(
                       child: Image.asset(
                         "assets/images/logo.png",
-                        width: 150.h,
+                        width: 100.h,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -49,17 +54,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               placeHolder: "Enter your email address",
                               inputType: "email",
                               iconName: "user",
-                              onChange: (value) => context
-                                  .read<AuthBloc>()
-                                  .add(LoginEmailEvent(value))),
+                              onChange: (value) => setState(() {
+                                    email = value;
+                                  })),
                           reusableText("Password", 20.w),
                           buildTextInput(
                               placeHolder: "Enter Password",
                               inputType: "password",
                               iconName: "lock",
-                              onChange: (value) => context
-                                  .read<AuthBloc>()
-                                  .add(LoginPasswordEvent(value))),
+                              onChange: (value) => setState(() {
+                                    password = value;
+                                  })),
                         ],
                       ),
                     ),
@@ -82,9 +87,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        AuthController(context: context).handleLoginIn("email");
+                        context
+                            .read<AuthBloc>()
+                            .add(LoginRequested(context, email, password));
+                        // AuthController(context: context).handleLoginIn("email");
                       },
-                      child: filledButton(AppColors.primaryElement, "LOGIN"),
+                      child: Container(
+                        margin:
+                            EdgeInsets.only(left: 25.w, right: 25.w, top: 25.w),
+                        height: 40.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.w),
+                          color: AppColors.primaryElement,
+                        ),
+                        child: Center(
+                          child: state is AuthLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  "LOGIN",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 1.5),
+                                ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
